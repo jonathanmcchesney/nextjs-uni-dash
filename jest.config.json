@@ -1,0 +1,20 @@
+{
+  "cache": false,
+  "clearMocks": true,
+  "testEnvironment": "jsdom",
+  "preset": "ts-jest",
+  "moduleNameMapper": { "\\.(css|scss)$": "identity-obj-proxy" },
+  "moduleFileExtensions": ["js", "jsx", "ts", "tsx", "mjs"],
+  "testPathIgnorePatterns": [".next/", "/node_modules/"],
+  "testMatch": [
+    "**/*.test.js",
+    "**/*.test.ts",
+    "**/*.test.mjs",
+    "**/*.test.jsx",
+    "**/*.test.tsx"
+  ],
+  "setupFiles": ["./jest.setup.ts"],
+  "transform": {
+    "^.+\\.(t|j)sx?$": "@swc/jest"
+  }
+}

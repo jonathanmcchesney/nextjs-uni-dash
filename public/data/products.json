@@ -1,0 +1,98 @@
+[
+  {
+    "id": "1",
+    "name": "Smartphone",
+    "category": "Electronics",
+    "price": 699,
+    "icon": "FiSmartphone",
+    "tags": ["tech", "gadget", "mobile"]
+  },
+  {
+    "id": "2",
+    "name": "Laptop",
+    "category": "Electronics",
+    "price": 1199,
+    "icon": "FiMonitor",
+    "tags": ["tech", "gadget", "computer"]
+  },
+  {
+    "id": "3",
+    "name": "Tablet",
+    "category": "Electronics",
+    "price": 499,
+    "icon": "FiTablet",
+    "tags": ["tech", "gadget", "mobile"]
+  },
+  {
+    "id": "4",
+    "name": "Smartwatch",
+    "category": "Electronics",
+    "price": 199,
+    "icon": "FiWatch",
+    "tags": ["tech", "wearable", "gadget"]
+  },
+  {
+    "id": "5",
+    "name": "Headphones",
+    "category": "Accessories",
+    "price": 150,
+    "icon": "FiHeadphones",
+    "tags": ["audio", "music", "gadget"]
+  },
+  {
+    "id": "6",
+    "name": "Gaming Console",
+    "category": "Gaming",
+    "price": 399,
+    "icon": "FiGamepad",
+    "tags": ["gaming", "tech", "entertainment"]
+  },
+  {
+    "id": "7",
+    "name": "Electric Guitar",
+    "category": "Musical Instruments",
+    "price": 899,
+    "icon": "FiMusic",
+    "tags": ["music", "instrument", "guitar"]
+  },
+  {
+    "id": "8",
+    "name": "Mountain Bike",
+    "category": "Sports",
+    "price": 1200,
+    "icon": "FiBike",
+    "tags": ["sports", "outdoor", "fitness"]
+  },
+  {
+    "id": "9",
+    "name": "Running Shoes",
+    "category": "Sports",
+    "price": 130,
+    "icon": "FiTrendingUp",
+    "tags": ["fitness", "running", "shoes"]
+  },
+  {
+    "id": "10",
+    "name": "Electric Kettle",
+    "category": "Home Appliances",
+    "price": 50,
+    "icon": "FiCoffee",
+    "tags": ["kitchen", "appliance", "electric"]
+  },
+  {
+    "id": "11",
+    "name": "Air Purifier",
+    "category": "Home Appliances",
+    "price": 250,
+    "icon": "FiWind",
+    "tags": ["home", "clean", "air"]
+  },
+  {
+    "id": "12",
+    "name": "Desk Lamp",
+    "category": "Furniture",
+    "price": 60,
+    "icon": "FiLightbulb",
+    "tags": ["home", "lighting", "furniture"]
+  }
+]
