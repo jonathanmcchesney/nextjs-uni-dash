@@ -2,7 +2,9 @@
   "name": "nextjs-ui",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
+    "analyse": "ANALYZE=true next build",
     "build": "next build",
     "cy:open": "cypress open",
     "dev": "NODE_ENV=development next dev",
@@ -37,6 +39,7 @@
   "devDependencies": {
     "@commitlint/cli": "^19.5.0",
     "@commitlint/config-conventional": "^19.5.0",
+    "@next/bundle-analyzer": "^14.2.14",
     "@swc/core": "^1.7.26",
     "@swc/jest": "^0.2.36",
     "@testing-library/jest-dom": "^6.5.0",

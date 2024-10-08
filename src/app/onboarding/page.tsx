@@ -2,6 +2,9 @@ import OnboardingChecklist from "../../components/OnboardingChecklist/Onboarding
 import { initializeApollo } from "@/lib/apollo/client";
 import { GET_TASKS } from "@/gql/taskQueries";
 
+// Render the page dynamically at runtime, using SSR
+export const dynamic = "force-dynamic";
+
 // SSR fetching of data, which invalidates the cache every time.
 // This means we get the benefits of being SEO friendly as the HTML contains the generated data,
 // but the trade off is increased performance costs and increased server load.
