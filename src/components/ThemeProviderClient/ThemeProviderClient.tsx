@@ -12,6 +12,7 @@ import Header from "../Header/Header";
 import styles from "./ThemeProviderClient.module.scss";
 import { getCookie, setCookie } from "@/utils/cookieUtils";
 import SimpleBreadcrumbs from "../SimpleBreadcrumbs/SimpleBreadcrumbs";
+// import { deepPurple, grey, purple } from "@mui/material/colors";
 
 export default function ThemeProviderClient({
   initialTheme = "light",
@@ -33,6 +34,14 @@ export default function ThemeProviderClient({
   const theme = createTheme({
     palette: {
       mode: mode as PaletteMode,
+      // ...(mode === "light" && {
+      //   primary: {
+      //     main: purple[500],
+      //   },
+      //   secondary: {
+      //     main: deepPurple[500],
+      //   },
+      // }),
     },
   });
 

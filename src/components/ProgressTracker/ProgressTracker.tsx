@@ -12,9 +12,11 @@ const ProgressTracker = ({
 
   return (
     <Box>
-      <Typography>Progress</Typography>
+      <Typography gutterBottom sx={{ marginBottom: 1 }}>
+        Progress
+      </Typography>
       <LinearProgress variant="determinate" value={progress} />
-      <Typography>
+      <Typography gutterBottom sx={{ marginTop: 1 }}>
         {completedTasks} of {totalTasks} tasks completed
       </Typography>
     </Box>

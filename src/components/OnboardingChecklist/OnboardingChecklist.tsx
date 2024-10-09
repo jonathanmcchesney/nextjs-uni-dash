@@ -8,11 +8,7 @@ import { useQuery } from "@apollo/client";
 import { GET_TASKS } from "@/gql/taskQueries";
 import { Skeleton } from "@mui/material";
 
-const OnboardingChecklist = ({
-  userId,
-}: {
-  userId: string;
-}) => {
+const OnboardingChecklist = ({ userId }: { userId: string }) => {
   const [currentTasks, setCurrentTasks] = useState<ITask[]>([]);
 
   const { data } = useQuery(GET_TASKS, {
@@ -32,7 +28,12 @@ const OnboardingChecklist = ({
       {data ? (
         <TaskList tasks={currentTasks} setTasks={setCurrentTasks} />
       ) : (
-        <Skeleton />
+        <Skeleton
+          variant="rounded"
+          animation="wave"
+          height="4rem"
+          sx={{ marginTop: "2rem", marginBottom: "1.6rem" }}
+        />
       )}
       <AddTask userId={userId} setTasks={setCurrentTasks} />
     </div>

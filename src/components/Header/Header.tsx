@@ -68,7 +68,7 @@ export default function Header({ toggleTheme, mode }: any) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" style={{ flexGrow: 1 }}>
-            NextJS Product Recommendations Demo
+            NextJS Uni-Dash
           </Typography>
           <Link href="/user" passHref>
             <IconButton aria-label="user profile" style={{ marginRight: "0.5rem" }}>
