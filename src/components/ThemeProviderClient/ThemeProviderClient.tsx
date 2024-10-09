@@ -6,10 +6,12 @@ import {
   createTheme,
   CssBaseline,
   PaletteMode,
+  Box,
 } from "@mui/material";
 import Header from "../Header/Header";
 import styles from "./ThemeProviderClient.module.scss";
 import { getCookie, setCookie } from "@/utils/cookieUtils";
+import SimpleBreadcrumbs from "../SimpleBreadcrumbs/SimpleBreadcrumbs";
 
 export default function ThemeProviderClient({
   initialTheme = "light",
@@ -40,7 +42,10 @@ export default function ThemeProviderClient({
       <div className={styles.header}>
         <Header toggleTheme={toggleTheme} mode={mode} />
       </div>
-      <div className={styles.content}> {children}</div>
+      <SimpleBreadcrumbs />
+      <Box className={styles.content} sx={{ padding: 8 }}>
+        {children}
+      </Box>
     </MuiThemeProvider>
   );
 }

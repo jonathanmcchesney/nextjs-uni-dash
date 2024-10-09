@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { ADD_TASK, GET_TASKS } from "../../gql/taskQueries";
-import { TextField, Button } from "@mui/material";
+import { TextField, Button, Box } from "@mui/material";
 import { v4 as uuidv4 } from "uuid";
 import { ITask } from "@/types/task";
 
@@ -22,30 +22,47 @@ const AddTask = ({
 
       addTask({
         variables,
-        refetchQueries: [GET_TASKS],
+        refetchQueries: [
+          {
+            query: GET_TASKS,
+            variables: { userId },
+          },
+        ],
       });
       setTasks((prevTasks) => [...prevTasks, { ...variables }]);
       setTaskTitle("");
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleSubmit();
+    }
+  };
+
   return (
-    <div>
+    <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
       <TextField
         label="New Task"
         value={taskTitle}
         onChange={(e) => setTaskTitle(e.target.value)}
+        onKeyDown={handleKeyDown}
         variant="outlined"
+        fullWidth
       />
+
       <Button
         onClick={handleSubmit}
         variant="contained"
         color="primary"
         size="large"
+        disabled={!taskTitle}
+        sx={{ borderRadius: "8px", paddingX: 3, whiteSpace: "nowrap" }}
       >
         Add Task
       </Button>
-    </div>
+    </Box>
   );
 };
 

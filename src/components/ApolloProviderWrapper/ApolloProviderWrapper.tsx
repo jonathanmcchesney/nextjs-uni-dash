@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, Suspense } from "react";
+import { ReactNode } from "react";
 import { ApolloProvider } from "@apollo/client";
 import { useApollo } from "@/lib/apollo/client";
 
@@ -15,11 +15,7 @@ const ApolloProviderWrapper = ({
 }: ApolloProviderWrapperProps) => {
   const apolloClient = useApollo(pageProps);
 
-  return (
-    <ApolloProvider client={apolloClient}>
-      <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
-    </ApolloProvider>
-  );
+  return <ApolloProvider client={apolloClient}>{children}</ApolloProvider>;
 };
 
 export default ApolloProviderWrapper;

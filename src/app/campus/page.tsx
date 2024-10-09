@@ -1,5 +1,13 @@
-const CampusPage = async () => {
-  return <div>Campus Page</div>;
-};
+import MockCampusMap from "@/components/MockCampusMap/MockCampusMap";
+import { Typography } from "@mui/material";
 
-export default CampusPage;
+export default function CampusPage() {
+  return (
+    <>
+      <Typography variant="h4" gutterBottom sx={{ marginBottom: 4 }}>
+        Welcome to the campus!
+      </Typography>
+      <MockCampusMap />
+    </>
+  );
+}

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import "./globals.scss";
 import ThemeProviderClient from "@/components/ThemeProviderClient/ThemeProviderClient";
 import ApolloProviderWrapper from "@/components/ApolloProviderWrapper/ApolloProviderWrapper";
-import SimpleBreadcrumbs from "@/components/SimpleBreadcrumbs/SimpleBreadcrumbs";
 import { cookies } from "next/headers";
 
 const title = "Recommendation App";
@@ -18,12 +17,11 @@ const RootLayout = ({ children, pageProps }: any): JSX.Element => {
   return (
     <html lang="en">
       <body>
-        <ThemeProviderClient initialTheme={themeCookie}>
-          <ApolloProviderWrapper pageProps={pageProps}>
-            <SimpleBreadcrumbs />
+        <ApolloProviderWrapper pageProps={pageProps}>
+          <ThemeProviderClient initialTheme={themeCookie}>
             {children}
-          </ApolloProviderWrapper>
-        </ThemeProviderClient>
+          </ThemeProviderClient>
+        </ApolloProviderWrapper>
       </body>
     </html>
   );
