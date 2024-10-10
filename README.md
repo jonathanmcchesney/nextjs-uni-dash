@@ -1,36 +1,118 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Uni-Dash
+
+This proof of concept web application is a showcase of modern web development techniques, including SSR, dynamic code splitting, Next.js, React, Material UI, TypeScript and GraphQL, designed to enhance the user experience for university students during their onboarding process.
+
+- [Uni-Dash](#uni-dash)
+  - [TLDR - Get the app running](#tldr---get-the-app-running)
+  - [Getting Started](#getting-started)
+  - [Tests](#tests)
+    - [Unit tests](#unit-tests)
+    - [Functional tests](#functional-tests)
+  - [Technologies](#technologies)
+  - [Use cases](#use-cases)
+  - [Usage](#usage)
+    - [User Interface](#user-interface)
+    - [GraphQL](#graphql)
+  - [Whats next?](#whats-next)
+
+## TLDR - Get the app running
+
+1. Fork this repo
+2. Ensure you are running on node v20+ ([download](https://nodejs.org/en/download/package-manager))
+3. To install packages run: 
+```bash
+yarn
+```
+4. To start the application in development mode:
+```bash
+yarn dev
+```
+5. Open [http://localhost:3000](http://localhost:3000) with your browser.
+
+Alternatively, to start the application in production mode:
+```bash
+yarn build
+yarn start
+```
 
 ## Getting Started
 
-First, run the development server:
+First, install the full and development package dependencies:
 
 ```bash
-npm run dev
-# or
+yarn
+```
+
+Next to start up the development server, simply run
+
+```bash
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+To run in production mode, first you will need to run a next build, via:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+yarn build
+```
 
-## Learn More
+Then to start thje production server, run:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+yarn start
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Tests
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+This repo uses Jest for unit testing, and Cypress for functional testing.
 
-## Deploy on Vercel
+### Unit tests
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+...
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Functional tests
+
+...
+
+## Technologies
+
+* React
+* TypeScript
+* NextJS (App Router)
+* GraphQL (and Apollo Client)
+* SASS
+* Material UI
+* Jest
+* Cypress
+
+## Use cases
+
+* Onboarding
+* University profile
+* Interactive timetable
+* User profile
+* Course and event recommendations
+* Campus map with navigation
+* Study and collaboration tool
+* Metal health and well being resources
+
+## Usage
+
+... 
+
+### User Interface
+
+To view the UI endpoint navigate to [http://localhost:3000](http://localhost:3000)
+
+...
+
+### GraphQL
+
+To view the GraphQL endpoint navigate to [http://localhost:3000/api/graphql](http://localhost:3000/api/graphql)
+
+...
+
+## Whats next?
+
+...
