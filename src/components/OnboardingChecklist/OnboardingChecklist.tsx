@@ -3,9 +3,9 @@ import React, { useEffect, useState } from "react";
 import TaskList from "../TaskList/TaskList";
 import ProgressTracker from "../ProgressTracker/ProgressTracker";
 import AddTask from "../AddTask/AddTask";
-import { ITask } from "@/types/task";
+import { ITask } from "../../types/task";
 import { useQuery } from "@apollo/client";
-import { GET_TASKS } from "@/gql/taskQueries";
+import { GET_TASKS } from "../../gql/taskQueries";
 import { Skeleton } from "@mui/material";
 
 const OnboardingChecklist = ({ userId }: { userId: string }) => {

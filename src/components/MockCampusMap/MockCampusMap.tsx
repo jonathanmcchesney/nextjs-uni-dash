@@ -57,7 +57,7 @@ const userLocation: ILocation = {
   description: "This is your current location.",
 };
 
-export default function MockCampusMap() {
+const MockCampusMap = () => {
   const [selectedLocation, setSelectedLocation] = useState<ILocation | null>(
     null
   );
@@ -120,6 +120,7 @@ export default function MockCampusMap() {
                   >
                     <RoomIcon fontSize="large" />
                     <Typography
+                      data-testid={`class-location-${classLocation.label.toLowerCase()}`}
                       sx={{
                         position: "absolute",
                         top: "50%",
@@ -154,6 +155,7 @@ export default function MockCampusMap() {
               >
                 <RoomIcon fontSize="large" />
                 <Typography
+                  data-testid={`location-${location.label.toLowerCase()}`}
                   sx={{
                     position: "absolute",
                     top: "50%",
@@ -171,6 +173,7 @@ export default function MockCampusMap() {
 
           <Tooltip title={userLocation.label} arrow>
             <IconButton
+              data-testid={`user-location`}
               sx={{
                 position: "absolute",
                 top: userLocation.coordinates.y,
@@ -246,4 +249,6 @@ export default function MockCampusMap() {
       </Box>
     </Card>
   );
-}
+};
+
+export default MockCampusMap;

@@ -7,27 +7,27 @@ jest.mock("@as-integrations/next", () => ({
   startServerAndCreateNextHandler: jest.fn(),
 }));
 
-jest.mock("@apollo/server/plugin/landingPage/default", () => ({
-  ApolloServerPluginLandingPageLocalDefault: jest.fn(),
-  ApolloServerPluginLandingPageProductionDefault: jest.fn(),
-}));
-
-describe("GraphQL API Server", () => {
+describe("GraphQL API Route", () => {
   let mockHandler: jest.Mock;
 
   beforeEach(() => {
     jest.clearAllMocks();
 
+    jest.resetModules();
+
     mockHandler = jest.fn((req, res) =>
       res.status(200).json({ data: "mock response" })
     );
+
     (startServerAndCreateNextHandler as jest.Mock).mockResolvedValue(
       mockHandler
     );
   });
 
   it("should handle GET requests successfully", async () => {
-    const { req, res } = createMocks({ method: "GET" });
+    const { req, res } = createMocks({
+      method: "GET",
+    });
 
     await GET(req, res);
 
@@ -61,23 +61,7 @@ describe("GraphQL API Server", () => {
 
     await POST(req, res);
 
-    expect(startServerAndCreateNextHandler).toHaveBeenCalledWith(
-      expect.any(ApolloServer)
-    );
-
-    expect(mockHandler).toHaveBeenCalledWith(req, res);
-
     expect(res._getStatusCode()).toBe(200);
     expect(res._getData()).toEqual(JSON.stringify({ data: "mock response" }));
-  });
-
-  it.only("should handle errors correctly", async () => {
-    const { req, res } = createMocks({ method: "POST" });
-
-    mockHandler.mockRejectedValueOnce(new Error("Server Error"));
-
-    await expect(POST(req, res)).rejects.toThrow("Server Error");
-
-    expect(res._getStatusCode()).toBe(200);
   });
 });

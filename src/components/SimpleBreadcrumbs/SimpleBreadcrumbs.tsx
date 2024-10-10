@@ -1,12 +1,12 @@
 "use client";
 
-import { capitaliseFirstLetter } from "@/utils/stringUtils";
+import { capitaliseFirstLetter } from "../../utils/stringUtils";
 import { useTheme } from "@mui/material/styles";
 import { Breadcrumbs, Typography, Link as MuiLink } from "@mui/material";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-export default function SimpleBreadcrumbs() {
+const SimpleBreadcrumbs = () => {
   const pathname = usePathname();
   const pathnames = pathname.split("/").filter(Boolean);
   const theme = useTheme();
@@ -65,4 +65,6 @@ export default function SimpleBreadcrumbs() {
       })}
     </Breadcrumbs>
   );
-}
+};
+
+export default SimpleBreadcrumbs;

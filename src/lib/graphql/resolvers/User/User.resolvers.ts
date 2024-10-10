@@ -1,6 +1,7 @@
-import { TRoot } from "@/types/graphql.ts";
-import { users } from "../__data__/user.mocks.ts";
+import { TRoot } from "@/types/graphql";
+import { users } from "../__data__/user.mocks";
 import { v4 as uuidv4 } from "uuid";
+import { IUser } from "@/types/user";
 
 // istanbul ignore next
 export const resolvers = {
@@ -12,26 +13,36 @@ export const resolvers = {
   Mutation: {
     createUser: (
       _: TRoot,
-      { name, email, age }: { name: string; email: string; age: number }
+      { name, email, age, major, universityId }: IUser
     ) => {
-      const newUser = { id: uuidv4(), name, email, age };
+      const newUser: IUser = {
+        id: uuidv4(),
+        name,
+        email,
+        age,
+        major,
+        universityId,
+      };
       users.push(newUser);
       return newUser;
     },
     updateUser: (
       _: TRoot,
-      {
-        id,
-        name,
-        email,
-        age,
-      }: { id: string; name: string; email: string; age: number }
+      { id, name, email, age, major, universityId }: IUser
     ) => {
       const user = users.find((user) => user.id === id);
       if (!user) return null;
-      if (name) user.name = name;
-      if (email) user.email = email;
-      if (age !== undefined) user.age = age;
+
+      const updatedUser = {
+        ...user,
+        name: name ?? user.name,
+        email: email ?? user.email,
+        age: age ?? user.age,
+        major: major ?? user.major,
+        universityId: universityId ?? user.universityId,
+      };
+
+      Object.assign(user, updatedUser);
       return user;
     },
     deleteUser: (_: TRoot, { id }: { id: string }) => {

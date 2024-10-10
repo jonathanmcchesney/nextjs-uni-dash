@@ -1,7 +1,7 @@
 import MockCampusMap from "@/components/MockCampusMap/MockCampusMap";
 import { Typography } from "@mui/material";
 
-export default function CampusPage() {
+const CampusPage = () => {
   return (
     <>
       <Typography variant="h4" gutterBottom sx={{ marginBottom: 4 }}>
@@ -10,4 +10,6 @@ export default function CampusPage() {
       <MockCampusMap />
     </>
   );
-}
+};
+
+export default CampusPage;

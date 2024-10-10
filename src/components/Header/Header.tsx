@@ -42,7 +42,7 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
-export default function Header({ toggleTheme, mode }: any) {
+const Header = ({ toggleTheme, mode }: any) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = (open: boolean) => {
@@ -71,7 +71,10 @@ export default function Header({ toggleTheme, mode }: any) {
             NextJS Uni-Dash
           </Typography>
           <Link href="/user" passHref>
-            <IconButton aria-label="user profile" style={{ marginRight: "0.5rem" }}>
+            <IconButton
+              aria-label="user profile"
+              style={{ marginRight: "0.5rem" }}
+            >
               <Person />
             </IconButton>
           </Link>
@@ -86,4 +89,6 @@ export default function Header({ toggleTheme, mode }: any) {
       </Suspense>
     </>
   );
-}
+};
+
+export default Header;

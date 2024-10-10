@@ -14,7 +14,7 @@ import {
 import { useTheme } from "@mui/material/styles";
 import { ICourse } from "@/types/course";
 
-export default function Programs({ programs }: { programs: any[] }) {
+const Programs = ({ programs }: { programs: any[] }) => {
   const [open, setOpen] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState<ICourse | null>(null);
   const theme = useTheme();
@@ -37,7 +37,11 @@ export default function Programs({ programs }: { programs: any[] }) {
           key={program.id}
           sx={{ padding: 4, marginBottom: 4 }}
         >
-          <Typography variant="h5" gutterBottom>
+          <Typography
+            data-testid={`program-name-${program.id}`}
+            variant="h5"
+            gutterBottom
+          >
             {program.name}
           </Typography>
 
@@ -49,6 +53,7 @@ export default function Programs({ programs }: { programs: any[] }) {
                 key={course.id}
               >
                 <ListItemText
+                  data-testid={`program-${program.id}-course-title-${course.id}`}
                   primary={course.title}
                   secondary={`Credits: ${course.credits}`}
                 />
@@ -76,7 +81,11 @@ export default function Programs({ programs }: { programs: any[] }) {
           {selectedCourse && (
             <>
               <Box sx={{ mb: 3 }}>
-                <Typography variant="h5" gutterBottom>
+                <Typography
+                  data-testid={`modal-course-title-${selectedCourse.id}`}
+                  variant="h5"
+                  gutterBottom
+                >
                   {selectedCourse.title}
                 </Typography>
               </Box>
@@ -89,7 +98,11 @@ export default function Programs({ programs }: { programs: any[] }) {
                 >
                   Course Description
                 </Typography>
-                <Typography variant="body1" sx={{ mb: 2 }}>
+                <Typography
+                  variant="body1"
+                  data-testid={`modal-course-description-${selectedCourse.id}`}
+                  sx={{ mb: 2 }}
+                >
                   {selectedCourse.description}
                 </Typography>
               </Box>
@@ -102,7 +115,10 @@ export default function Programs({ programs }: { programs: any[] }) {
                 >
                   Credits
                 </Typography>
-                <Typography variant="body1">
+                <Typography
+                  data-testid={`modal-course-credits-${selectedCourse.id}`}
+                  variant="body1"
+                >
                   {selectedCourse.credits}
                 </Typography>
               </Box>
@@ -121,4 +137,6 @@ export default function Programs({ programs }: { programs: any[] }) {
       </Modal>
     </Box>
   );
-}
+};
+
+export default Programs;

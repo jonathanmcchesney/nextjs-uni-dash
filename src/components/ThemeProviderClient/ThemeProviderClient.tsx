@@ -10,14 +10,10 @@ import {
 } from "@mui/material";
 import Header from "../Header/Header";
 import styles from "./ThemeProviderClient.module.scss";
-import { getCookie, setCookie } from "@/utils/cookieUtils";
+import { getCookie, setCookie } from "../../utils/cookieUtils";
 import SimpleBreadcrumbs from "../SimpleBreadcrumbs/SimpleBreadcrumbs";
-// import { deepPurple, grey, purple } from "@mui/material/colors";
 
-export default function ThemeProviderClient({
-  initialTheme = "light",
-  children,
-}: any) {
+const ThemeProviderClient = ({ initialTheme = "light", children }: any) => {
   const [mode, setMode] = useState(initialTheme);
 
   useEffect(() => {
@@ -34,14 +30,6 @@ export default function ThemeProviderClient({
   const theme = createTheme({
     palette: {
       mode: mode as PaletteMode,
-      // ...(mode === "light" && {
-      //   primary: {
-      //     main: purple[500],
-      //   },
-      //   secondary: {
-      //     main: deepPurple[500],
-      //   },
-      // }),
     },
   });
 
@@ -57,4 +45,6 @@ export default function ThemeProviderClient({
       </Box>
     </MuiThemeProvider>
   );
-}
+};
+
+export default ThemeProviderClient;

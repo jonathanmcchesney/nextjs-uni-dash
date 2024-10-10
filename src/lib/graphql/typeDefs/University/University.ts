@@ -45,7 +45,7 @@ export const typeDefs = gql`
   type Query {
     getUniversity(id: ID!): University
 
-    getProgramsByStudent(studentId: ID!): [Program!]!
+    getProgramsByStudent(userId: ID!): [Program!]!
 
     getAllUniversities: [University!]!
   }

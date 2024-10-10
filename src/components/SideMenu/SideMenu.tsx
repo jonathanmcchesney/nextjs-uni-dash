@@ -14,7 +14,7 @@ import { styled } from "@mui/material/styles";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import HomeIcon from "@mui/icons-material/Home";
 import HandshakeIcon from "@mui/icons-material/Handshake";
-// import InventoryIcon from "@mui/icons-material/Inventory";
+import InventoryIcon from "@mui/icons-material/Inventory";
 import SchoolIcon from "@mui/icons-material/School";
 import MapIcon from "@mui/icons-material/Map";
 import HealthAndSafetyIcon from "@mui/icons-material/HealthAndSafety";
@@ -32,14 +32,12 @@ const pages = [
   { name: "Timetable", path: "/timetable", icon: <NewspaperIcon /> },
   { name: "Study", path: "/study", icon: <GroupsIcon /> },
   { name: "Universities", path: "/university", icon: <SchoolIcon /> },
-  // { name: "Product", path: "/product", icon: <InventoryIcon /> },
-  // {
-  //   name: "Reccomendations",
-  //   path: "/reccomendations",
-  //   icon: <InventoryIcon />,
-  // },
+  {
+    name: "Reccomendations",
+    path: "/reccomendations",
+    icon: <InventoryIcon />,
+  },
   { name: "Health", path: "/health", icon: <HealthAndSafetyIcon /> },
-
 ];
 
 const additionalPages = [
@@ -54,13 +52,13 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   justifyContent: "flex-end",
 }));
 
-export default function SideMenu({
+const SideMenu = ({
   open,
   toggleMenu,
 }: {
   open: boolean;
   toggleMenu: (open: boolean) => void;
-}) {
+}) => {
   const drawerWidth = 240;
 
   return (
@@ -78,7 +76,10 @@ export default function SideMenu({
       open={open}
     >
       <DrawerHeader>
-        <IconButton onClick={() => toggleMenu(false)}>
+        <IconButton
+          data-testid="side-menu-close-button"
+          onClick={() => toggleMenu(false)}
+        >
           <ChevronLeftIcon />
         </IconButton>
       </DrawerHeader>
@@ -87,6 +88,7 @@ export default function SideMenu({
         {pages.map(({ name, path, icon }) => (
           <ListItem key={name} disablePadding>
             <ListItemButton
+              data-testid={`side-menu-link-button-${name.toLowerCase()}`}
               component={Link}
               href={path}
               onClick={() => toggleMenu(false)}
@@ -103,6 +105,7 @@ export default function SideMenu({
           <ListItem key={name} disablePadding>
             <ListItemButton
               component={Link}
+              data-testid={`side-menu-link-button-${name.toLowerCase()}`}
               href={path}
               onClick={() => toggleMenu(false)}
               target="_blank"
@@ -116,4 +119,6 @@ export default function SideMenu({
       </List>
     </Drawer>
   );
-}
+};
+
+export default SideMenu;

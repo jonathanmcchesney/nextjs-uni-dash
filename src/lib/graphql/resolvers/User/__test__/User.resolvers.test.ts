@@ -1,39 +1,46 @@
-import { resolvers as userResolvers } from "../User.resolvers.ts";
 import { v4 as uuidv4 } from "uuid";
+import { resolvers as userResolvers } from "../User.resolvers";
+import { users } from "../../__data__/user.mocks";
 
 jest.mock("uuid", () => ({
   v4: jest.fn(),
 }));
 
 describe("User Resolvers", () => {
+  const mockUsers = [
+    {
+      id: "d47ffe3f-3b5a-430c-88a5-d4bcf4c875f1",
+      name: "John Doe",
+      email: "john@example.com",
+      age: 25,
+      major: "Computer Science",
+      universityId: "u123",
+    },
+    {
+      id: "d47ffe3f-3b5a-430c-88a5-d4bcf4c875f2",
+      name: "Jane Smith",
+      email: "jane@example.com",
+      age: 30,
+      major: "Mathematics",
+      universityId: "u124",
+    },
+  ];
+
+  beforeEach(() => {
+    users.length = 0;
+    users.push(...mockUsers);
+  });
+
   test("should fetch all users", () => {
     const result = userResolvers.Query.getUsers();
-    expect(result).toEqual([
-      {
-        id: "d47ffe3f-3b5a-430c-88a5-d4bcf4c875f1",
-        name: "John Doe",
-        email: "john@example.com",
-        age: 25,
-      },
-      {
-        id: "d47ffe3f-3b5a-430c-88a5-d4bcf4c875f2",
-        name: "Jane Smith",
-        email: "jane@example.com",
-        age: 30,
-      },
-    ]);
+    expect(result).toEqual(mockUsers);
   });
 
   test("should fetch a user by id", () => {
     const result = userResolvers.Query.getUser(null, {
       id: "d47ffe3f-3b5a-430c-88a5-d4bcf4c875f1",
     });
-    expect(result).toEqual({
-      id: "d47ffe3f-3b5a-430c-88a5-d4bcf4c875f1",
-      name: "John Doe",
-      email: "john@example.com",
-      age: 25,
-    });
+    expect(result).toEqual(mockUsers[0]);
   });
 
   test("should create a new user", () => {
@@ -43,12 +50,53 @@ describe("User Resolvers", () => {
       name: "Alice",
       email: "alice@example.com",
       age: 22,
+      major: "Physics",
+      universityId: "u125",
     });
+
     expect(result).toEqual({
       id: "mocked-uuid-value",
       name: "Alice",
       email: "alice@example.com",
       age: 22,
+      major: "Physics",
+      universityId: "u125",
     });
+
+    expect(users.length).toBe(3);
+  });
+
+  test("should update an existing user", () => {
+    const updatedUser = userResolvers.Mutation.updateUser(null, {
+      id: "d47ffe3f-3b5a-430c-88a5-d4bcf4c875f1",
+      name: "John Updated",
+      email: "john_updated@example.com",
+      age: 26,
+      major: "Data Science",
+      universityId: "u126",
+    });
+
+    expect(updatedUser).toEqual({
+      id: "d47ffe3f-3b5a-430c-88a5-d4bcf4c875f1",
+      name: "John Updated",
+      email: "john_updated@example.com",
+      age: 26,
+      major: "Data Science",
+      universityId: "u126",
+    });
+
+    const result = userResolvers.Query.getUser(null, {
+      id: "d47ffe3f-3b5a-430c-88a5-d4bcf4c875f1",
+    });
+    expect(result).toEqual(updatedUser);
+  });
+
+  test("should delete a user by id", () => {
+    const result = userResolvers.Mutation.deleteUser(null, {
+      id: "d47ffe3f-3b5a-430c-88a5-d4bcf4c875f1",
+    });
+
+    expect(result).toEqual(mockUsers[0]);
+    expect(users.length).toBe(1);
   });
 });

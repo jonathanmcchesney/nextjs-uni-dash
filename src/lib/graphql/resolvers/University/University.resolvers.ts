@@ -7,10 +7,10 @@ export const resolvers = {
     getUniversity: (_: TRoot, { id }: { id: string }) =>
       universities.find((uni) => uni.id === id),
 
-    getProgramsByStudent: (_: TRoot, { studentId }: { studentId: string }) => {
+    getProgramsByStudent: (_: TRoot, { userId }: { userId: string }) => {
       return (
         studentPrograms?.find(
-          (studentProgram) => studentProgram?.studentId === studentId
+          (studentProgram) => studentProgram?.userId === userId
         )?.programs || []
       );
     },

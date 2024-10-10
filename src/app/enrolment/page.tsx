@@ -5,6 +5,10 @@ import {
 } from "@/gql/universityQueries";
 import { initializeApollo } from "@/lib/apollo/client";
 import {
+  currentlyEnrolledUniversityId,
+  currentlyLoggedInUserId,
+} from "@/utils/constants";
+import {
   Typography,
   Paper,
   List,
@@ -23,21 +27,18 @@ async function fetchUniversity(universityId: string) {
   return data.getUniversity;
 }
 
-async function fetchPrograms(studentId: string) {
+async function fetchPrograms(userId: string) {
   const apolloClient = initializeApollo();
   const { data } = await apolloClient.query({
     query: GET_PROGRAMS_BY_STUDENT,
-    variables: { studentId },
+    variables: { userId },
   });
   return data.getProgramsByStudent;
 }
 
 export default async function EnrolmentPage() {
-  const universityId = "springfield";
-  const studentId = "user-123";
-
-  const university = await fetchUniversity(universityId);
-  const programs = await fetchPrograms(studentId);
+  const university = await fetchUniversity(currentlyEnrolledUniversityId);
+  const programs = await fetchPrograms(currentlyLoggedInUserId);
 
   return (
     <>

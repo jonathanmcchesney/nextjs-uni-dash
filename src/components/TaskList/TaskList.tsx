@@ -39,11 +39,15 @@ const TaskList = ({
           <>
             <ListItemIcon>
               <Checkbox
+                data-testid={`checkbox-${task.id}`}
                 checked={task.completed}
                 onClick={() => handleToggle(task.id)}
               />
             </ListItemIcon>
-            <ListItemText primary={task.title} />
+            <ListItemText
+              data-testid={`task-title-${task.id}`}
+              primary={task.title}
+            />
           </>
         </ListItem>
       ))}

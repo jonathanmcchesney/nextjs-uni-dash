@@ -399,7 +399,7 @@ const universities = [
 
 const studentPrograms = [
   {
-    studentId: "user-123",
+    userId: "d47ffe3f-3b5a-430c-88a5-d4bcf4c875f1",
     programs: [
       {
         id: "25e68f2a-7d23-425d-9ec6-acf39f0a69e2",
@@ -440,7 +440,7 @@ const studentPrograms = [
     ],
   },
   {
-    studentId: "student-2",
+    userId: "d47ffe3f-3b5a-430c-88a5-d4bcf4c875f2",
     programs: [
       {
         id: "25e68f2a-7d23-425d-9ec6-acf39f0a6942",

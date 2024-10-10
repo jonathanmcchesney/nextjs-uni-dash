@@ -7,8 +7,9 @@ const ProgressTracker = ({
   tasks: Array<{ completed: boolean }>;
 }) => {
   const totalTasks = tasks?.length || 0;
+
   const completedTasks = tasks?.filter((task) => task.completed).length || 0;
-  const progress = (completedTasks / totalTasks) * 100;
+  const progress = totalTasks === 0 ? 0 : (completedTasks / totalTasks) * 100;
 
   return (
     <Box>

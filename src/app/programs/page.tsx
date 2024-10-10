@@ -1,21 +1,21 @@
 import Programs from "@/components/Programs/Programs";
 import { GET_PROGRAMS_BY_STUDENT } from "@/gql/universityQueries";
 import { initializeApollo } from "@/lib/apollo/client";
+import { currentlyLoggedInUserId } from "@/utils/constants";
 import { Typography } from "@mui/material";
 
-async function fetchPrograms(studentId: string) {
+async function fetchPrograms(userId: string) {
   const apolloClient = initializeApollo();
   const { data } = await apolloClient.query({
     query: GET_PROGRAMS_BY_STUDENT,
-    variables: { studentId },
+    variables: { userId },
   });
 
   return data.getProgramsByStudent;
 }
 
 export default async function UniversityProgramsPage() {
-  const studentId = "user-123";
-  const programs = await fetchPrograms(studentId);
+  const programs = await fetchPrograms(currentlyLoggedInUserId);
 
   return (
     <>

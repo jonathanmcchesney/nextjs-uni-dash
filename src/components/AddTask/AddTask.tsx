@@ -51,7 +51,6 @@ const AddTask = ({
         variant="outlined"
         fullWidth
       />
-
       <Button
         onClick={handleSubmit}
         variant="contained"

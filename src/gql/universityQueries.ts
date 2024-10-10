@@ -50,8 +50,8 @@ export const GET_UNIVERSITY = gql`
 `;
 
 export const GET_PROGRAMS_BY_STUDENT = gql`
-  query GetProgramsByStudent($studentId: ID!) {
-    getProgramsByStudent(studentId: $studentId) {
+  query GetProgramsByStudent($userId: ID!) {
+    getProgramsByStudent(userId: $userId) {
       id
       name
       courses {

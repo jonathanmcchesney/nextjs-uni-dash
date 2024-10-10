@@ -6,6 +6,7 @@ import {
 } from "@/gql/healthQueries";
 import WellnessTracker from "@/components/WellnessTracker/WellnessTracker";
 import { List, ListItem, ListItemText, Typography, Paper } from "@mui/material";
+import { currentlyLoggedInUserId } from "@/utils/constants";
 
 async function fetchMindfulnessTips() {
   const apolloClient = initializeApollo();
@@ -26,7 +27,6 @@ async function fetchHealthResources() {
 export default async function HealthWellnessPage() {
   const mindfulnessTips = await fetchMindfulnessTips();
   const healthResources = await fetchHealthResources();
-  const userId = "user-123";
 
   return (
     <>
@@ -48,7 +48,7 @@ export default async function HealthWellnessPage() {
       </Paper>
       <Paper sx={{ padding: 2, marginBottom: 4 }}>
         <Typography variant="h5">Wellness Tracker</Typography>
-        <WellnessTracker userId={userId} />
+        <WellnessTracker userId={currentlyLoggedInUserId} />
       </Paper>
       <Paper sx={{ padding: 2 }}>
         <Typography variant="h5">Mindfulness Tips</Typography>
