@@ -31,19 +31,19 @@ describe("User Resolvers", () => {
     users.push(...mockUsers);
   });
 
-  test("should fetch all users", () => {
+  it("should fetch all users", () => {
     const result = userResolvers.Query.getUsers();
     expect(result).toEqual(mockUsers);
   });
 
-  test("should fetch a user by id", () => {
+  it("should fetch a user by id", () => {
     const result = userResolvers.Query.getUser(null, {
       id: "d47ffe3f-3b5a-430c-88a5-d4bcf4c875f1",
     });
     expect(result).toEqual(mockUsers[0]);
   });
 
-  test("should create a new user", () => {
+  it("should create a new user", () => {
     (uuidv4 as jest.Mock).mockReturnValue("mocked-uuid-value");
 
     const result = userResolvers.Mutation.createUser(null, {
@@ -66,7 +66,7 @@ describe("User Resolvers", () => {
     expect(users.length).toBe(3);
   });
 
-  test("should update an existing user", () => {
+  it("should update an existing user", () => {
     const updatedUser = userResolvers.Mutation.updateUser(null, {
       id: "d47ffe3f-3b5a-430c-88a5-d4bcf4c875f1",
       name: "John Updated",
@@ -91,7 +91,7 @@ describe("User Resolvers", () => {
     expect(result).toEqual(updatedUser);
   });
 
-  test("should delete a user by id", () => {
+  it("should delete a user by id", () => {
     const result = userResolvers.Mutation.deleteUser(null, {
       id: "d47ffe3f-3b5a-430c-88a5-d4bcf4c875f1",
     });

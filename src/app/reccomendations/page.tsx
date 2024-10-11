@@ -1,7 +1,7 @@
 import { Box, Paper, Typography } from "@mui/material";
 import InventoryIcon from "@mui/icons-material/Inventory";
 
-const ReccomendationsPage = async () => {
+const ReccomendationsPage = () => {
   return (
     <>
       <Typography variant="h4" gutterBottom sx={{ marginBottom: 4 }}>

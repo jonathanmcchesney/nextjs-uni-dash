@@ -1,4 +1,4 @@
-import MockCampusMap from "@/components/MockCampusMap/MockCampusMap";
+import MockCampusMap from "../../components/MockCampusMap/MockCampusMap";
 import { Typography } from "@mui/material";
 
 const CampusPage = () => {

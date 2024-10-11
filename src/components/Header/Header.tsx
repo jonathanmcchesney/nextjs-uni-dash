@@ -68,7 +68,7 @@ const Header = ({ toggleTheme, mode }: any) => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" style={{ flexGrow: 1 }}>
-            NextJS Uni-Dash
+            Uni-Dash
           </Typography>
           <Link href="/user" passHref>
             <IconButton

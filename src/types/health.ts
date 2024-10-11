@@ -1,5 +1,5 @@
 export interface IWellness {
-  id: string;
+  id?: string;
   userId: string;
   mood: number;
   sleep: number;

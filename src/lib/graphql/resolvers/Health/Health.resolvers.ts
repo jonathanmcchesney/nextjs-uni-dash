@@ -19,7 +19,6 @@ export const resolvers = {
     },
 
     getWellnessData: async (_: TRoot, { userId }: { userId: string }) => {
-      console.log(wellnessData);
       return wellnessData.filter((entry) => entry.userId === userId);
     },
   },

@@ -8,10 +8,13 @@ import {
 } from "../../../gql/healthQueries";
 import "@testing-library/jest-dom";
 
+const mockIsoString = "2023-10-07T00:00:00.000Z";
+const mockLocaleDateString = "07/10/2023";
+
 const wellnessDataMock = [
   {
     userId: "user123",
-    date: new Date().toISOString(),
+    date: mockIsoString,
     mood: 7,
     sleep: 8,
     stress: 5,
@@ -39,7 +42,7 @@ const mocks = [
           mood: 7,
           sleep: 8,
           stress: 5,
-          date: new Date().toISOString(),
+          date: mockIsoString,
         },
       },
     },
@@ -50,7 +53,7 @@ const mocks = [
           mood: 7,
           sleep: 8,
           stress: 5,
-          date: new Date().toISOString(),
+          date: mockIsoString,
         },
       },
     },
@@ -58,6 +61,16 @@ const mocks = [
 ];
 
 describe("WellnessTracker Component", () => {
+  beforeAll(() => {
+    jest.spyOn(Date.prototype, "toISOString").mockReturnValue(mockIsoString);
+    jest
+      .spyOn(Date.prototype, "toLocaleDateString")
+      .mockReturnValue(mockLocaleDateString);
+  });
+
+  afterAll(() => {
+    jest.restoreAllMocks();
+  });
   it("renders initial input view and sliders with data from graphql", async () => {
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
@@ -117,7 +130,7 @@ describe("WellnessTracker Component", () => {
     });
   });
 
-  it.skip("displays error message when save fails", async () => {
+  it("displays error message when save fails", async () => {
     const errorMocks = [
       ...mocks,
       {
@@ -126,10 +139,10 @@ describe("WellnessTracker Component", () => {
           variables: {
             input: {
               userId: "user123",
-              mood: 7,
+              mood: 5,
               sleep: 8,
               stress: 5,
-              date: expect.any(String),
+              date: mockIsoString,
             },
           },
         },

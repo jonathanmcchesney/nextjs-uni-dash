@@ -1,4 +1,4 @@
-import { TRoot } from "@/types/graphql.ts";
+import { TRoot } from "../../../../types/graphql.ts";
 import { courses } from "../__data__/course.mocks.ts";
 
 // istanbul ignore next
@@ -6,7 +6,7 @@ export const resolvers = {
   Query: {
     getCourses: () => courses,
     getCourse: (_: TRoot, { id }: { id: string }) =>
-      courses.find((course) => course.id === id),
+      courses.find((course) => course.id === id) || null,
   },
   Mutation: {
     createCourse: (

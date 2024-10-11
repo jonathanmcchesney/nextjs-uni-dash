@@ -11,7 +11,7 @@ async function fetchAllUniversities() {
   return data.getAllUniversities;
 }
 
-export default async function UniversitySelectionPage() {
+const UniversitySelectionPage = async () => {
   const universities = await fetchAllUniversities();
 
   return (
@@ -79,4 +79,6 @@ export default async function UniversitySelectionPage() {
       </Box>
     </>
   );
-}
+};
+
+export default UniversitySelectionPage;

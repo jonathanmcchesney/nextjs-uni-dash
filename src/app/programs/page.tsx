@@ -14,7 +14,7 @@ async function fetchPrograms(userId: string) {
   return data.getProgramsByStudent;
 }
 
-export default async function UniversityProgramsPage() {
+const UniversityProgramsPage = async () => {
   const programs = await fetchPrograms(currentlyLoggedInUserId);
 
   return (
@@ -25,4 +25,6 @@ export default async function UniversityProgramsPage() {
       <Programs programs={programs} />
     </>
   );
-}
+};
+
+export default UniversityProgramsPage;

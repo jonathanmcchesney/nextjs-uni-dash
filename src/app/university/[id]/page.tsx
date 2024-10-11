@@ -27,11 +27,11 @@ async function fetchUniversity(id: string) {
   return data.getUniversity;
 }
 
-export default async function UniversityDetailsPage({
+const UniversityDetailsPage = async ({
   params,
 }: {
   params: { id: string };
-}) {
+}) => {
   const universityId = params.id;
   const university = await fetchUniversity(universityId);
 
@@ -122,4 +122,6 @@ export default async function UniversityDetailsPage({
       </Paper>
     </>
   );
-}
+};
+
+export default UniversityDetailsPage;

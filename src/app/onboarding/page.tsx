@@ -1,8 +1,8 @@
 import { Paper, Typography } from "@mui/material";
 import OnboardingChecklist from "../../components/OnboardingChecklist/OnboardingChecklist";
-import { currentlyLoggedInUserId } from "@/utils/constants";
+import { currentlyLoggedInUserId } from "../../utils/constants";
 
-export default async function OnboardingPage() {
+const OnboardingPage = () => {
   return (
     <>
       <Typography variant="h4" gutterBottom sx={{ marginBottom: 4 }}>
@@ -16,4 +16,6 @@ export default async function OnboardingPage() {
       </Paper>
     </>
   );
-}
+};
+
+export default OnboardingPage;

@@ -1,8 +1,8 @@
-import { UserProfile } from "@/components/UserProfile/UserProfile";
-import { currentlyLoggedInUserId } from "@/utils/constants";
+import { UserProfile } from "../../components/UserProfile/UserProfile";
+import { currentlyLoggedInUserId } from "../../utils/constants";
 import { Suspense } from "react";
 
-const UserPage = async () => {
+const UserPage = () => {
   return (
     <Suspense fallback={<div>Loading user details...</div>}>
       <UserProfile userId={currentlyLoggedInUserId} />

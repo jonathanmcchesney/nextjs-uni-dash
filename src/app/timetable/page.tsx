@@ -1,5 +1,5 @@
-import Timetable from "@/components/Timetable/Timetable";
-import { currentlyLoggedInUserId } from "@/utils/constants";
+import Timetable from "../../components/Timetable/Timetable";
+import { currentlyLoggedInUserId } from "../../utils/constants";
 import { Typography } from "@mui/material";
 
 const TimetablePage = () => {

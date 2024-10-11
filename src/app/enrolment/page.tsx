@@ -1,13 +1,13 @@
-import Programs from "@/components/Programs/Programs";
+import Programs from "../../components/Programs/Programs";
 import {
   GET_PROGRAMS_BY_STUDENT,
   GET_UNIVERSITY,
-} from "@/gql/universityQueries";
-import { initializeApollo } from "@/lib/apollo/client";
+} from "../../gql/universityQueries";
+import { initializeApollo } from "../../lib/apollo/client";
 import {
   currentlyEnrolledUniversityId,
   currentlyLoggedInUserId,
-} from "@/utils/constants";
+} from "../../utils/constants";
 import {
   Typography,
   Paper,
@@ -36,7 +36,7 @@ async function fetchPrograms(userId: string) {
   return data.getProgramsByStudent;
 }
 
-export default async function EnrolmentPage() {
+const EnrolmentPage = async () => {
   const university = await fetchUniversity(currentlyEnrolledUniversityId);
   const programs = await fetchPrograms(currentlyLoggedInUserId);
 
@@ -82,4 +82,6 @@ export default async function EnrolmentPage() {
       <Programs programs={programs} />
     </>
   );
-}
+};
+
+export default EnrolmentPage;

@@ -18,7 +18,7 @@ import InventoryIcon from "@mui/icons-material/Inventory";
 import SchoolIcon from "@mui/icons-material/School";
 import MapIcon from "@mui/icons-material/Map";
 import HealthAndSafetyIcon from "@mui/icons-material/HealthAndSafety";
-import NewspaperIcon from "@mui/icons-material/Newspaper";
+import ScheduleIcon from "@mui/icons-material/Schedule";
 import GroupsIcon from "@mui/icons-material/Groups";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import BookIcon from "@mui/icons-material/Book";
@@ -29,7 +29,7 @@ const pages = [
   { name: "My Enrolment", path: "/enrolment", icon: <SchoolIcon /> },
   { name: "My Programs", path: "/programs", icon: <BookIcon /> },
   { name: "Campus", path: "/campus", icon: <MapIcon /> },
-  { name: "Timetable", path: "/timetable", icon: <NewspaperIcon /> },
+  { name: "Timetable", path: "/timetable", icon: <ScheduleIcon /> },
   { name: "Study", path: "/study", icon: <GroupsIcon /> },
   { name: "Universities", path: "/university", icon: <SchoolIcon /> },
   {

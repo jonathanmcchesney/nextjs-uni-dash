@@ -20,7 +20,7 @@ describe("Header Component", () => {
     );
 
     expect(screen.getByRole("button", { name: /menu/i })).toBeInTheDocument();
-    expect(screen.getByText("NextJS Uni-Dash")).toBeInTheDocument();
+    expect(screen.getByText("Uni-Dash")).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: /user profile/i })
     ).toBeInTheDocument();

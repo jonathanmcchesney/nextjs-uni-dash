@@ -1,7 +1,7 @@
 import { Box, Paper, Typography } from "@mui/material";
 import SchoolIcon from "@mui/icons-material/School";
 
-const StudyPage = async () => {
+const StudyPage = () => {
   return (
     <>
       <Typography variant="h4" gutterBottom sx={{ marginBottom: 4 }}>

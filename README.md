@@ -1,6 +1,8 @@
 # Uni-Dash
 
-This proof of concept web application is a showcase of modern web development techniques, including SSR, dynamic code splitting, Next.js, React, Material UI, TypeScript and GraphQL, designed to enhance the user experience for university students during their onboarding process.
+Your one-stop platform to manage your university life—track your progress, stay organized, and access helpful resources.
+
+This proof of concept dashboard application is a showcase of modern web development techniques, including SSR, dynamic code splitting, Next.js, React, Material UI, TypeScript and GraphQL, designed to enhance the user experience for university students during their onboarding process.
 
 - [Uni-Dash](#uni-dash)
   - [TLDR - Get the app running](#tldr---get-the-app-running)

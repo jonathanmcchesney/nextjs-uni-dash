@@ -8,7 +8,6 @@ const updateOrInsert = (array: any[], newItem: any, identifierKey: string) => {
   } else {
     array.push(newItem);
   }
-  console.log({ array });
   return array;
 };
 

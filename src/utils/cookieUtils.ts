@@ -12,7 +12,17 @@ const setCookie = (name: string, value: string, hoursExpiresIn: number) => {
     date.setTime(date.getTime() + hoursExpiresIn * 60 * 60 * 1000);
     expires = `; expires=${date.toUTCString()}`;
   }
-  document.cookie = `${name}=${value || ""}${expires}; path=/`;
+
+  const existingCookies = document.cookie
+    .split("; ")
+    .filter((cookie) => !cookie.startsWith(`${name}=`) && cookie.trim() !== "");
+
+  const newCookie = `${name}=${value || ""}${expires}; path=/`;
+
+  document.cookie =
+    existingCookies.length > 0
+      ? `${existingCookies.join("; ")}; ${newCookie}`
+      : newCookie;
 };
 
 export { getCookie, setCookie };
