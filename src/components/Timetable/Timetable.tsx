@@ -44,6 +44,8 @@ function DraggableEvent({ event, index }: { event: any; index: number }) {
     <Draggable draggableId={event.id} index={index}>
       {(provided) => (
         <Card
+          tabIndex={0}
+          data-testid={`draggable-card-${event.id.toLowerCase()}-index`}
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
