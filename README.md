@@ -13,10 +13,15 @@ This proof of concept dashboard application is a showcase of modern web developm
     - [Functional tests](#functional-tests)
     - [NextJS bundle analyser](#nextjs-bundle-analyser)
   - [Technologies](#technologies)
+    - [React](#react)
+    - [TypeScript](#typescript)
+    - [Next.js](#nextjs)
+    - [Material UI](#material-ui)
+    - [GraphQL](#graphql)
   - [Use cases](#use-cases)
   - [Usage](#usage)
     - [User Interface](#user-interface)
-    - [GraphQL](#graphql)
+    - [GraphQL](#graphql-1)
   - [Core concepts](#core-concepts)
     - [Server side sendering (SSR)](#server-side-sendering-ssr)
     - [Hydration](#hydration)
@@ -150,6 +155,73 @@ Once complete, it will automaatically open the visualation dashboard in your bro
 * Jest
 * Cypress
 
+### React
+
+Benefits:
+
+* **Component-Based Architecture**: Encourages modular development, making it easier to reuse and maintain code, which is beneficial for building large applications like onboarding checklists, user profiles, and timetables.
+* **Virtual DOM**: React's efficient re-rendering mechanism improves performance, providing a fast and responsive UI, especially when managing dynamic content like timetables or progress trackers.
+* **Ecosystem**: A large ecosystem of libraries, tools, and community support, making it easier to implement features like drag-and-drop scheduling or real-time updates for collaboration tools.
+
+Downsides:
+
+* **Learning Curve**: Although relatively easy to get started, getting up to speed with React's advanced concepts (hooks, context, etc) can take time.
+* **Boilerplate Code**: React often requires more setup and boilerplate compared to simpler frameworks or libraries, especially when integrating with other libraries like GraphQL or state management tools.
+
+### TypeScript
+
+Benefits:
+
+* **Type Safety**: TypeScript's static typing helps prevent runtime errors by catching issues at compile time, making the development of complex features (like AI-powered recommendations or interactive timetables) safer.
+* **Improved Code Readability**: Type annotations make code easier to understand, especially in large applications where many developers are involved.
+* **Tooling**: Better autocompletion and refactoring tools in IDEs, which improves developer productivity when building or updating features like study collaboration tools or user profile sections.
+
+Downsides:
+
+* **Learning Curve**: Developers need to learn and understand TypeScript's types and its more complex configurations, which can slow down onboarding.
+* **Overhead**: TypeScript introduces some overhead in terms of additional boilerplate and slightly longer build times due to type checking.
+
+### Next.js
+
+Benefits:
+
+* **Server-Side Rendering (SSR)**: Automatically handles SSR and static site generation, improving SEO (search engine optimisation) and initial load times for content like university profiles or course recommendations.
+* **API Routes**: Built-in API (serverless functions) routes allow you to easily create serverless functions, ideal for handling things like form submissions (e.g., registering for courses or RSVP for events) without needing a separate backend.
+* **Optimized Performance**: Next.js provides automatic code splitting and optimized bundles, making apps more performant, especially for users with slow connections.
+
+Downsides:
+
+* **Complexity for Small Apps**: Next.js is powerful, but it might introduce unnecessary complexity for smaller apps or single-page applications that don’t need SSR or API routes.
+* **Configuration Overhead**: Although much of Next.js is pre-configured, more complex use cases (e.g., advanced routing, state management) may require additional configuration and custom setups.
+
+### Material UI
+
+Benefits:
+
+* **Pre-built Components**: Material UI provides a wide range of pre-built, customizable components (buttons, cards, progress bars), which accelerate the development of user interfaces like onboarding checklists, progress trackers, and user profiles.
+* **Responsive Design**: Material UI’s grid and layout system makes it easier to build responsive applications, which is especially useful for features like interactive timetables and collaboration tools.
+* **Customizable**: Material UI is highly customizable, allowing you to create consistent, theme-based designs for features like color-coded schedules or mental health resource sections.
+
+Downsides:
+
+* **Bundle Size**: Material UI can increase the size of the JavaScript bundle, which may impact the performance of the app, especially for users with slower connections.
+* **Learning Curve**: Developers unfamiliar with Material Design principles may need some time to adjust to its design patterns and customize components effectively.
+
+### GraphQL
+
+Benefits:
+
+* **Efficient Data Fetching**: GraphQL allows clients to specify exactly the data they need, reducing over/under-fetching and improving performance, which is essential for dynamic features like personalized course recommendations or interactive timetables.
+* **Single API Endpoint**: GraphQL simplifies the backend architecture by exposing all available queries and mutations through a single endpoint, making it easier to maintain and extend features like study collaboration tools or wellness trackers.
+* **Real-time Capabilities**: GraphQL subscriptions can be used to provide real-time updates, which is useful for features like collaboration tools.
+
+Downsides:
+
+* **Complexity**: Setting up and maintaining a GraphQL server, schema, and resolvers can be complex, especially when compared to simpler REST APIs.
+* **Over/under-fetching on the Client Side**: While GraphQL reduces over-fetching at the API level, poorly designed queries on the client side can still lead to inefficient data usage or performance bottlenecks.
+* **Caching Issues**: Managing caching can be more complicated in GraphQL, as it’s not as straightforward as with RESTful endpoints, especially when working with libraries like Apollo Client.
+
+
 ## Use cases
 
 * Onboarding
@@ -176,6 +248,11 @@ When logged in the home page displays several options to navigate to, each displ
 To view the GraphQL endpoint navigate to [http://localhost:3000/api/graphql](http://localhost:3000/api/graphql)
 
 This is only available in development mode. In production mode introspection has been disabled. You can still navigate to the page via the URL but you would be able to view the sandbox area like you would in development.
+
+Note the graphql route is set up as serverless functions [here](src/app/api/graphql/route.tsx). This exposes two HTTP requests:
+
+1. GET - This is when a user directly navigates to this route, this will render the apollo sandbox/playground.
+2. POST - This is when a user makes a graphql query, note all queries are considered POST requests, even queries such as `getUser`.
 
 ## Core concepts
 
