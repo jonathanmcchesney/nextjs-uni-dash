@@ -1,12 +1,16 @@
+import ErrorSuspenseWrapper from "../../components/ErrorSuspenseWrapper/ErrorSuspenseWrapper";
 import { UserProfile } from "../../components/UserProfile/UserProfile";
 import { currentlyLoggedInUserId } from "../../utils/constants";
-import { Suspense } from "react";
+import LoadingFallback from "../../components/LoadingFallback/LoadingFallback";
 
 const UserPage = () => {
   return (
-    <Suspense fallback={<div>Loading user details...</div>}>
+    <ErrorSuspenseWrapper
+      fallback={<LoadingFallback text="Loading user details..." />}
+      shouldDisplayLogout
+    >
       <UserProfile userId={currentlyLoggedInUserId} />
-    </Suspense>
+    </ErrorSuspenseWrapper>
   );
 };
 

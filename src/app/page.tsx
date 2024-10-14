@@ -18,6 +18,7 @@ import HandshakeIcon from "@mui/icons-material/Handshake";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 const HomePage = () => {
+  /* normally in production we would not expose the graphql playground */
   const cards = [
     {
       title: "University Profile",

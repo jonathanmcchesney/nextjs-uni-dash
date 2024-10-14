@@ -26,7 +26,7 @@ describe("ReccomendationsPage", () => {
 
     expect(
       screen.getByText(
-        "This will include recommended courses, events and clubs based on your intrests and timetable schedule."
+        "This will include recommended courses, events and clubs based on your interests and timetable schedule."
       )
     ).toBeInTheDocument();
   });

@@ -12,3 +12,12 @@ export const GET_USER = gql`
     }
   }
 `;
+
+export const GET_USERS_FOR_AUTH = gql`
+  query GetUsersForAuth {
+    getUsersForAuth {
+      id
+      email
+    }
+  }
+`;

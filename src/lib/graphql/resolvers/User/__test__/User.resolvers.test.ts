@@ -1,102 +1,188 @@
-import { v4 as uuidv4 } from "uuid";
-import { resolvers as userResolvers } from "../User.resolvers";
+import { resolvers } from "../User.resolvers";
 import { users } from "../../__data__/user.mocks";
 
 jest.mock("uuid", () => ({
-  v4: jest.fn(),
+  v4: jest.fn(() => "new-uuid"),
 }));
 
 describe("User Resolvers", () => {
-  const mockUsers = [
-    {
-      id: "d47ffe3f-3b5a-430c-88a5-d4bcf4c875f1",
-      name: "John Doe",
-      email: "john@example.com",
-      age: 25,
-      major: "Computer Science",
-      universityId: "u123",
-    },
-    {
-      id: "d47ffe3f-3b5a-430c-88a5-d4bcf4c875f2",
-      name: "Jane Smith",
-      email: "jane@example.com",
-      age: 30,
-      major: "Mathematics",
-      universityId: "u124",
-    },
-  ];
-
   beforeEach(() => {
     users.length = 0;
-    users.push(...mockUsers);
+    users.push(
+      { id: "user-1", name: "John Doe", email: "john@example.com", age: 25 },
+      { id: "user-2", name: "Jane Doe", email: "jane@example.com", age: 30 }
+    );
   });
 
-  it("should fetch all users", () => {
-    const result = userResolvers.Query.getUsers();
-    expect(result).toEqual(mockUsers);
+  describe("getUsersForAuth", () => {
+    it("should return all users without authentication", () => {
+      const result = resolvers.Query.getUsersForAuth(null, null, null);
+      expect(result).toEqual(users);
+    });
   });
 
-  it("should fetch a user by id", () => {
-    const result = userResolvers.Query.getUser(null, {
-      id: "d47ffe3f-3b5a-430c-88a5-d4bcf4c875f1",
+  describe("getUsers", () => {
+    it("should return users when authenticated", () => {
+      const context = { user: { id: "user-1" } };
+      const result = resolvers.Query.getUsers(null, null, context);
+      expect(result).toEqual(users);
     });
-    expect(result).toEqual(mockUsers[0]);
+
+    it("should throw an error when not authenticated", () => {
+      const context = { user: null };
+      expect(() => resolvers.Query.getUsers(null, null, context)).toThrow(
+        "Not authenticated"
+      );
+    });
   });
 
-  it("should create a new user", () => {
-    (uuidv4 as jest.Mock).mockReturnValue("mocked-uuid-value");
-
-    const result = userResolvers.Mutation.createUser(null, {
-      name: "Alice",
-      email: "alice@example.com",
-      age: 22,
-      major: "Physics",
-      universityId: "u125",
+  describe("getUser", () => {
+    it("should return a user by ID when authenticated", () => {
+      const context = { user: { id: "user-1" } };
+      const result = resolvers.Query.getUser(null, { id: "user-1" }, context);
+      expect(result).toEqual(users[0]);
     });
 
-    expect(result).toEqual({
-      id: "mocked-uuid-value",
-      name: "Alice",
-      email: "alice@example.com",
-      age: 22,
-      major: "Physics",
-      universityId: "u125",
+    it("should throw an error when not authenticated", () => {
+      const context = { user: null };
+      expect(() =>
+        resolvers.Query.getUser(null, { id: "user-1" }, context)
+      ).toThrow("Not authenticated");
     });
 
-    expect(users.length).toBe(3);
+    it("should throw an error if the user is not found", () => {
+      const context = { user: { id: "user-1" } };
+      expect(() =>
+        resolvers.Query.getUser(null, { id: "non-existent" }, context)
+      ).toThrow("User not found");
+    });
   });
 
-  it("should update an existing user", () => {
-    const updatedUser = userResolvers.Mutation.updateUser(null, {
-      id: "d47ffe3f-3b5a-430c-88a5-d4bcf4c875f1",
-      name: "John Updated",
-      email: "john_updated@example.com",
-      age: 26,
-      major: "Data Science",
-      universityId: "u126",
+  describe("createUser", () => {
+    it("should create a new user when authenticated", () => {
+      const context = { user: { id: "user-1" } };
+      const args = {
+        name: "New User",
+        email: "newuser@example.com",
+        age: 28,
+        major: "Physics",
+        universityId: "uni-123",
+      };
+
+      const result = resolvers.Mutation.createUser(null, args, context);
+      expect(result).toEqual({
+        id: "new-uuid",
+        ...args,
+      });
+
+      expect(users).toContainEqual({
+        id: "new-uuid",
+        ...args,
+      });
     });
 
-    expect(updatedUser).toEqual({
-      id: "d47ffe3f-3b5a-430c-88a5-d4bcf4c875f1",
-      name: "John Updated",
-      email: "john_updated@example.com",
-      age: 26,
-      major: "Data Science",
-      universityId: "u126",
+    it("should throw an error when not authenticated", () => {
+      const context = { user: null };
+      expect(() =>
+        resolvers.Mutation.createUser(
+          null,
+          {
+            id: "user-1",
+            name: "",
+            email: "",
+            age: 20,
+            major: "",
+            universityId: "",
+          },
+          context
+        )
+      ).toThrow("Not authenticated");
     });
-
-    const result = userResolvers.Query.getUser(null, {
-      id: "d47ffe3f-3b5a-430c-88a5-d4bcf4c875f1",
-    });
-    expect(result).toEqual(updatedUser);
   });
 
-  it("should delete a user by id", () => {
-    const result = userResolvers.Mutation.deleteUser(null, {
-      id: "d47ffe3f-3b5a-430c-88a5-d4bcf4c875f1",
+  describe("updateUser", () => {
+    it("should update an existing user when authenticated", () => {
+      const context = { user: { id: "user-1" } };
+      const args = {
+        id: "user-1",
+        name: "Updated Name",
+        email: "updated@example.com",
+        age: 35,
+      };
+
+      const result = resolvers.Mutation.updateUser(null, args, context);
+      expect(result).toEqual({
+        ...users[0],
+        ...args,
+      });
+
+      expect(users[0]).toEqual({
+        ...users[0],
+        ...args,
+      });
     });
 
-    expect(result).toEqual(mockUsers[0]);
-    expect(users.length).toBe(1);
+    it("should throw an error if the user is not found", () => {
+      const context = { user: { id: "user-1" } };
+      const args = {
+        id: "non-existent",
+        name: "Updated Name",
+        email: "",
+        age: 20,
+        major: "",
+        universityId: "",
+      };
+      expect(() => resolvers.Mutation.updateUser(null, args, context)).toThrow(
+        "User not found"
+      );
+    });
+
+    it("should throw an error when not authenticated", () => {
+      const context = { user: null };
+      expect(() =>
+        resolvers.Mutation.updateUser(
+          null,
+          {
+            id: "",
+            name: "",
+            email: "",
+            age: 20,
+            major: "",
+            universityId: "",
+          },
+          context
+        )
+      ).toThrow("Not authenticated");
+    });
+  });
+
+  describe("deleteUser", () => {
+    it("should delete a user when authenticated", () => {
+      const context = { user: { id: "user-1" } };
+      const args = { id: "user-1" };
+
+      const userToBeDeleted = users.find((user) => user.id === "user-1");
+      expect(users).toContainEqual(userToBeDeleted);
+
+      const result = resolvers.Mutation.deleteUser(null, args, context);
+      expect(result).toEqual(userToBeDeleted);
+
+      expect(users).not.toContainEqual(userToBeDeleted);
+    });
+
+    it("should return null if the user is not found", () => {
+      const context = { user: { id: "user-1" } };
+      const args = { id: "non-existent" };
+
+      const result = resolvers.Mutation.deleteUser(null, args, context);
+      expect(result).toBeNull();
+    });
+
+    it("should throw an error when not authenticated", () => {
+      const context = { user: null };
+      expect(() =>
+        resolvers.Mutation.deleteUser(null, { id: "user-1" }, context)
+      ).toThrow("Not authenticated");
+    });
   });
 });

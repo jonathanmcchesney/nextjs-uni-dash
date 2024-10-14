@@ -100,23 +100,26 @@ const SideMenu = ({
         ))}
       </List>
       <Divider />
-      <List>
-        {additionalPages.map(({ name, path, icon }) => (
-          <ListItem key={name} disablePadding>
-            <ListItemButton
-              component={Link}
-              data-testid={`side-menu-link-button-${name.toLowerCase()}`}
-              href={path}
-              onClick={() => toggleMenu(false)}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <ListItemIcon>{icon}</ListItemIcon>
-              <ListItemText primary={name} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
+      {/* normally in production we would not expose the graphql playground */}
+      {process.env.NODE_ENV !== "production" && (
+        <List>
+          {additionalPages.map(({ name, path, icon }) => (
+            <ListItem key={name} disablePadding>
+              <ListItemButton
+                component={Link}
+                data-testid={`side-menu-link-button-${name.toLowerCase()}`}
+                href={path}
+                onClick={() => toggleMenu(false)}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <ListItemIcon>{icon}</ListItemIcon>
+                <ListItemText primary={name} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+      )}
     </Drawer>
   );
 };

@@ -20,7 +20,7 @@ const ReccomendationsPage = () => {
         </Typography>
         <Typography sx={{ marginBottom: 2 }}>
           This will include recommended courses, events and clubs based on your
-          intrests and timetable schedule.
+          interests and timetable schedule.
         </Typography>
       </Paper>
     </>

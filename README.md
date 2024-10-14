@@ -30,6 +30,7 @@ yarn
 yarn dev
 ```
 5. Open [http://localhost:3000](http://localhost:3000) with your browser.
+6. Login in with user and pass: `john@example.com`
 
 Alternatively, to start the application in production mode:
 ```bash
@@ -59,11 +60,13 @@ To run in production mode, first you will need to run a next build, via:
 yarn build
 ```
 
-Then to start thje production server, run:
+Then to start the production server, run:
 
 ```bash
 yarn start
 ```
+
+You can log in to the application using the same email and password: `john@example.com` - in the future these will be encrypted and stored in a database.
 
 ## Tests
 

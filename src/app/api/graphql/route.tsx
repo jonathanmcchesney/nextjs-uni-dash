@@ -3,9 +3,12 @@ import {
   ApolloServerPluginLandingPageProductionDefault,
 } from "@apollo/server/plugin/landingPage/default";
 import { ApolloServer } from "@apollo/server";
-import { schema } from "../../../lib/graphql";
-
 import { startServerAndCreateNextHandler } from "@as-integrations/next";
+import { schema } from "../../../lib/graphql";
+import { cookies } from "next/headers";
+import jwt from "jsonwebtoken";
+
+const JWT_SECRET = process.env.JWT_SECRET || "fake-secret-key";
 
 const server = new ApolloServer({
   schema,
@@ -20,8 +23,30 @@ const server = new ApolloServer({
 let serverHandler: any;
 
 async function initServer() {
-  if (!serverHandler) {
-    serverHandler = startServerAndCreateNextHandler(server);
+  // we cache the server when running in dev or production, but don't cache when testing, for easier unit testing
+  if (!serverHandler || process.env.NODE_ENV === "test") {
+    serverHandler = startServerAndCreateNextHandler(server, {
+      context: async () => {
+        const cookieStore = cookies();
+        const token = cookieStore.get("token")?.value || null;
+
+        let user = null;
+
+        if (token) {
+          try {
+            user = jwt.verify(token, JWT_SECRET);
+          } catch (error) {
+            if (error instanceof Error) {
+              console.error("Invalid token:", error.message);
+            } else {
+              console.error("Unknown error during token verification");
+            }
+          }
+        }
+
+        return { user };
+      },
+    });
   }
   return serverHandler;
 }
