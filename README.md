@@ -25,6 +25,7 @@ This proof of concept dashboard application is a showcase of modern web developm
     - [Code splitting](#code-splitting)
     - [JSON Web Token (JWT)](#json-web-token-jwt)
     - [Other concepts coveraged](#other-concepts-coveraged)
+    - [More information](#more-information)
   - [Whats next?](#whats-next)
 
 ## TLDR - Get the app running
@@ -312,6 +313,45 @@ Examples:
 - Jest testing
 - Cypress
 
+### More information
+
+1. What is the difference between React.Lazy and Next.js dynamic loading?
+
+```
+The key difference between React.lazy and Next.js dynamic loading is the use case and environment:
+
+React.lazy is used for client-side code splitting, allowing components to be loaded lazily during rendering via Suspense, but it does not support server-side rendering (SSR).
+
+Next.js dynamic is used for both client-side and server-side dynamic imports, offering more flexibility with features like disabling SSR (ssr: false), custom loading components, and built-in handling of code splitting.
+```
+
+2. Does GraphQL support suspense or is it experimental?
+```
+GraphQL does not natively support Suspense on its own. However, React's useSuspenseQuery from Apollo Client, which leverages Suspense, is currently experimental. And from my experience, has a fair few issues to work out.
+
+This feature allows React components to wait for GraphQL data without explicitly managing loading states, but it’s still in the experimental phase and not recommended for production use yet.
+
+Essentially, GraphQL itself doesn’t directly support Suspense, but frameworks like Apollo Client are working on experimental integrations to leverage React's Suspense for data fetching.
+```
+
+3. What is the difference between the nextjs page routes and api routes?
+
+```
+Pages - Serve React components that are rendered as UI pages
+App - Serve React components that are rendered as UI pages
+
+This is not to be mistaken for the previous way of setting up a NextJs application using the Pages Router, we are using the newer App Router architecture instead.
+```
+
+4. What is the difference between the pages router and app router?
+
+```
+The Pages Router and the App Router in Next.js serve similar purposes but have key differences in how they handle routing and rendering. The App Router is a newer feature introduced in Next.js 13, focusing on improving scalability and flexibility, while the Pages Router has been the traditional way of defining routes in Next.js.
+
+Pages router does not support React’s Server Components and lacks granular control over streaming and parallel rendering. All pages are client-side components by default.
+
+App router has several new features: Server and Client Components, layouts, streaming (Pages can be progressively rendered and streamed to the client as they are generated) and Parallel and Intercepted Routes ( Enables more advanced routing patterns, like loading multiple sections of a page in parallel or rendering modal routes).
+```
 
 ## Whats next?
 
