@@ -52,7 +52,6 @@ const UniversityDetailsPage = async ({
         </Button>
       </Link>
 
-      {/* University Info */}
       <Paper elevation={3} sx={{ padding: 4, marginBottom: 4 }}>
         <Typography variant="h4" gutterBottom>
           {university.name}
@@ -65,7 +64,6 @@ const UniversityDetailsPage = async ({
         </Typography>
       </Paper>
 
-      {/* Faculty Section */}
       <Paper elevation={3} sx={{ padding: 4, marginBottom: 4 }}>
         <Typography variant="h5" sx={{ marginBottom: 2 }}>
           Faculty
@@ -82,7 +80,6 @@ const UniversityDetailsPage = async ({
         </List>
       </Paper>
 
-      {/* Programs Section */}
       <Paper elevation={3} sx={{ padding: 4, marginBottom: 4 }}>
         <Typography variant="h5" sx={{ marginBottom: 2 }}>
           Programs
@@ -101,7 +98,6 @@ const UniversityDetailsPage = async ({
         </List>
       </Paper>
 
-      {/* University Resources Section */}
       <Paper elevation={3} sx={{ padding: 4 }}>
         <Typography variant="h5" sx={{ marginBottom: 2 }}>
           University Resources

@@ -11,13 +11,16 @@ import {
   AppBarProps as MuiAppBarProps,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { lazy, Suspense, useState } from "react";
+import { Suspense, useState } from "react";
 import Link from "next/link";
 import { styled } from "@mui/material/styles";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
+import dynamic from "next/dynamic";
 
-const SideMenu = lazy(() => import("../SideMenu/SideMenu"));
+const SideMenu = dynamic(() => import("../SideMenu/SideMenu"), {
+  loading: () => <p>Loading...</p>,
+});
 
 const drawerWidth = 240;
 

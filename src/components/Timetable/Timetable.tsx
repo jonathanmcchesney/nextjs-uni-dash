@@ -25,6 +25,7 @@ const parseTimeSlot = (timeSlot: string) => {
   return { startTime, endTime };
 };
 
+// TODO - this is a very early implementation of the timetable, i'd like to refactor how the droppable ids are consumed and parsed
 function DraggableEvent({ event, index }: { event: any; index: number }) {
   const theme = useTheme();
 
