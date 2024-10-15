@@ -1,20 +1,22 @@
 import { TRoot } from "@/types/graphql";
-import { studentPrograms, universities } from "../__data__/university.mocks";
+import { University, IUniversity } from "../../../../lib/mongodb/models/University";
 
-// istanbul ignore next
 export const resolvers = {
   Query: {
-    getUniversity: (_: TRoot, { id }: { id: string }) =>
-      universities.find((uni) => uni.id === id),
+    getUniversity: async (
+      _: TRoot,
+      { id }: { id: string }
+    ): Promise<IUniversity | null> => {
+      const university = await University.findOne({ id });
+      if (!university) {
+        throw new Error("University not found");
+      }
 
-    getProgramsByStudent: (_: TRoot, { userId }: { userId: string }) => {
-      return (
-        studentPrograms?.find(
-          (studentProgram) => studentProgram?.userId === userId
-        )?.programs || []
-      );
+      return university;
     },
 
-    getAllUniversities: () => universities,
+    getAllUniversities: async (): Promise<IUniversity[]> => {
+      return University.find();
+    },
   },
 };

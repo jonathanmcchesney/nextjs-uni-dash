@@ -1,34 +1,42 @@
-import { TRoot } from "@/types/graphql.ts";
-import { tasks } from "../__data__/student.mocks.ts";
+import { TRoot } from "../../../../types/graphql.ts";
 import { v4 as uuidv4 } from "uuid";
+import { Task, ITask } from "../../../../lib/mongodb/models/Task";
 
-// istanbul ignore next
 export const resolvers = {
   Query: {
-    getTasks: (_: TRoot, { userId }: { userId: string }) =>
-      tasks.filter((task) => task.userId === userId),
+    getTasks: async (
+      _: TRoot,
+      { userId }: { userId: string }
+    ): Promise<ITask[]> => {
+      return Task.find({ userId });
+    },
   },
+
   Mutation: {
-    addTask: (
+    addTask: async (
       _: TRoot,
       { id, title, userId }: { id: string; userId: string; title: string }
-    ) => {
-      const newTask = {
+    ): Promise<ITask> => {
+      const newTask = new Task({
         id: id || uuidv4(),
         title,
         completed: false,
         userId,
-      };
-      tasks.push(newTask);
-      return newTask;
+      });
+
+      return newTask.save();
     },
-    toggleTaskCompletion: (_: TRoot, { id }: { id: string }) => {
-      const task = tasks.find((task) => task.id === id);
+
+    toggleTaskCompletion: async (
+      _: TRoot,
+      { id }: { id: string }
+    ): Promise<ITask | null> => {
+      const task = await Task.findById(id);
       if (task) {
         task.completed = !task.completed;
-        return task;
+        return task.save();
       }
-      return {};
+      return null;
     },
   },
 };

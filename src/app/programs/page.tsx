@@ -1,5 +1,5 @@
 import Programs from "@/components/Programs/Programs";
-import { GET_PROGRAMS_BY_STUDENT } from "@/gql/universityQueries";
+import { GET_PROGRAMS_BY_STUDENT } from "@/gql/programQueries";
 import { initializeApollo } from "@/lib/apollo/client";
 import { currentlyLoggedInUserId } from "@/utils/constants";
 import { Typography } from "@mui/material";

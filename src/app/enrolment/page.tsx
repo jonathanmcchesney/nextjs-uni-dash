@@ -1,8 +1,6 @@
+import { GET_PROGRAMS_BY_STUDENT } from "@/gql/programQueries";
 import Programs from "../../components/Programs/Programs";
-import {
-  GET_PROGRAMS_BY_STUDENT,
-  GET_UNIVERSITY,
-} from "../../gql/universityQueries";
+import { GET_UNIVERSITY } from "../../gql/universityQueries";
 import { initializeApollo } from "../../lib/apollo/client";
 import {
   currentlyEnrolledUniversityId,

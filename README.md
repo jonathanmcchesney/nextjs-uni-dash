@@ -2,22 +2,30 @@
 
 Your one-stop platform to manage your university life—track your progress, stay organized, and access helpful resources.
 
-This proof of concept dashboard application is a showcase of modern web development techniques, including SSR, dynamic code splitting, Next.js, React, Material UI, TypeScript and GraphQL, designed to enhance the user experience for university students during their onboarding process.
+This proof of concept dashboard application is a showcase of modern web development techniques, including SSR, dynamic code splitting, Next.js, React, Material UI, TypeScript, MongoDB and GraphQL, designed to enhance the user experience for university students during their onboarding process.
 
 - [Uni-Dash](#uni-dash)
   - [TLDR - Get the app running](#tldr---get-the-app-running)
+  - [Mongodb](#mongodb)
+    - [Setup Mongodb server](#setup-mongodb-server)
+    - [Setup MongoDB Compass](#setup-mongodb-compass)
+    - [Populating MongoDB](#populating-mongodb)
+  - [Environment Variables](#environment-variables)
   - [Getting Started](#getting-started)
   - [Tests](#tests)
     - [Unit tests](#unit-tests)
     - [linting](#linting)
     - [Functional tests](#functional-tests)
     - [NextJS bundle analyser](#nextjs-bundle-analyser)
+  - [Tooling](#tooling)
+    - [Commander](#commander)
   - [Technologies](#technologies)
     - [React](#react)
     - [TypeScript](#typescript)
     - [Next.js](#nextjs)
     - [Material UI](#material-ui)
     - [GraphQL](#graphql)
+      - [MongoDB \& Mongoose](#mongodb--mongoose)
   - [Use cases](#use-cases)
   - [Usage](#usage)
     - [User Interface](#user-interface)
@@ -37,16 +45,25 @@ This proof of concept dashboard application is a showcase of modern web developm
 
 1. Fork this repo
 2. Ensure you are running on node v20+ ([download](https://nodejs.org/en/download/package-manager))
-3. To install packages run: 
+3. Setup mongodb, and start the service [more details here](#setup-mongodb-server)
+4. To install packages, run: 
 ```bash
 yarn
 ```
-4. To start the application in development mode:
+5. To setup your env variables, run:
+```bash
+yarn envs pull
+```
+6. To setup the database documents and pre-populate data, run: 
+```bash
+yarn seed all
+```
+7. To start the application in development mode, run:
 ```bash
 yarn dev
 ```
-5. Open [http://localhost:3000](http://localhost:3000) with your browser.
-6. Login in with user and pass: `john@example.com`
+8. Open [http://localhost:3000](http://localhost:3000) with your browser.
+9. Login in with user and pass: `john@example.com`
 
 Alternatively, to start the application in production mode:
 ```bash
@@ -54,12 +71,164 @@ yarn build
 yarn start
 ```
 
+## Mongodb
+
+MongoDB is a NoSQL database that stores data in flexible, JSON-like documents instead of traditional rows and columns like relational databases. It's highly scalable and allows for rapid development, making it suitable for applications where the data structure may evolve over time.
+
+### Setup Mongodb server
+
+Mongodb installation [docs}(https://www.mongodb.com/docs/manual/administration/install-community/)
+
+Assuming you are on Mac OS (Intel chip), you can install via:
+
+```bash
+brew tap mongodb/brew
+
+brew update
+
+brew install mongodb-community@8.0
+```
+
+To run mongodb:
+
+```bash
+brew services start mongodb-community@8.0
+```
+
+To stop mongodb:
+
+```bash
+brew services stop mongodb-community@8.0
+```
+
+To view your services:
+
+```bash
+brew services list
+```
+
+Finally to start the mongodb server (mongo daemon), run:
+
+```bash
+mongod
+```
+
+### Setup MongoDB Compass
+
+MongoDB compass is a GUI (Graphical User Interface) for usage with MongoDB. You can install it [here](https://www.mongodb.com/try/download/compass)
+
+Once set up you can connect to your local MongoDB instance with `mongodb://localhost:27017`
+
+When you open Compass, you should be able to see `uniDashDb` containing all the documents that our GraphQL resolvers will be interacting with.
+
+### Populating MongoDB
+
+Commander tooling has been included to allow for easy `seeding` of data into the documents.
+
+To seed all documents (this will create the document, delete all data and then populate with preset data), simply run:
+
+```bash
+yarn seed all
+```
+
+You should see it run through each document one by one, and if you refresh MongoDB compass, you should see the populated data.
+
+Note if you want to only seed one table (e.g. user), you can do:
+
+```bash
+yarn seed user
+```
+
+You can also view help information via:
+
+```bash
+yarn seed --help
+```
+
+Example output:
+
+```bash
+Usage: seed [options] [command]
+
+Options:
+  -h, --help      display help for command
+
+Commands:
+  all             Seed all databases
+  health          Seed the health, wellness and mindfulness databases
+  program         Seed the program database
+  task            Seed the task database
+  timetable       Seed the timetable database
+  user            Seed the user database
+  university      Seed the university database
+  help [command]  display help for command
+```
+
+## Environment Variables
+
+Environment variables in a Node project store configuration values (like API keys, database URLs, or application settings) outside the code. They help separate sensitive or environment-specific data, making the app more secure and easier to configure for different environments (development, production, test, etc).
+
+Using commander I have included an [envs script](./scripts/envs/envs.ts), this can be invoked by running
+
+```bash
+yarn envs pull
+```
+
+This script takes the values in the [env.json](env.json) file and uses it to create and populate the relevant .env files. E.g. for an env.json file with contents:
+
+```json
+{
+  "constants": {
+    "MONGODB_URI": "mongodb://localhost:27017/uniDashDb",
+    "JWT_SECRET": "fake-secret-key"
+  },
+  "environments": {
+    "development": {
+      "JWT_SECRET": "fake-secret-dev-key"
+    },
+    "production": {
+      "JWT_SECRET": "fake-secret-production-key"
+    },
+    "test": {}
+  }
+}
+```
+
+This will create 3 new .env files
+1. .env.development
+2. .env.production
+3. .env.test
+
+Anything stored in constants will be applied to all environments, but if a value is set in the environment that has the same key, e.g.`JWT_SECRET` in the example above, this would override the value in constants.
+
+e.g. this would be what is populated for `.env.production`
+```bash
+MONGODB_URI=mongodb://localhost:27017/uniDashDb
+JWT_SECRET=fake-secret-production-key
+```
+
+These .env files are not tracked by git, so once created you can then manually update them to store any "real" sensitive data without having them tracked.
+
+** **DO NOT STORE SENSITIVE INFORMATION WITHIN THE env.json !!!** **
+
 ## Getting Started
 
 First, install the full and development package dependencies:
 
 ```bash
 yarn
+```
+
+You then need to set up your .env files using the env.json file, simply run:
+
+```bash
+yarn envs pull
+```
+
+You now need to seed/populate your database documents by running:
+
+```bash
+yarn seed all
 ```
 
 Next to start up the development server, simply run
@@ -144,6 +313,33 @@ yarn analyse
 
 Once complete, it will automaatically open the visualation dashboard in your browser.
 
+## Tooling
+
+### Commander
+
+Commander is a JavaScript library used for building command-line interface (CLI) applications. It simplifies the process of parsing command-line arguments, handling options, and executing different commands. You can easily define commands, subcommands, flags, and options for CLI tools.
+
+This allows us to create intuitive node scripts (we leverage Typescript and tsx), and a CLI to easily run locally, or on a pipeline.
+
+The scripts are located int the [scripts/](./scripts/) directory, currently we include 2 useful scripts leveraging commander:
+
+1. Envs - seamlessly creates .env files based on the env.json file
+2. Seeds - creates a pre-populates mongodb documents
+
+These scripts are referenced in the package json file, allowing us to easily run them with yarn, e.g.
+
+```bash
+    "envs": "tsx scripts/envs/envs.ts",
+    "seed": "tsx scripts/seed/seed.ts",
+```
+
+Then to invoke them we can simply run:
+
+```bash
+yarn envs pull
+yarn seed all
+```
+
 ## Technologies
 
 * React
@@ -154,6 +350,7 @@ Once complete, it will automaatically open the visualation dashboard in your bro
 * Material UI
 * Jest
 * Cypress
+* MongoDB
 
 ### React
 
@@ -221,6 +418,23 @@ Downsides:
 * **Over/under-fetching on the Client Side**: While GraphQL reduces over-fetching at the API level, poorly designed queries on the client side can still lead to inefficient data usage or performance bottlenecks.
 * **Caching Issues**: Managing caching can be more complicated in GraphQL, as it’s not as straightforward as with RESTful endpoints, especially when working with libraries like Apollo Client.
 
+#### MongoDB & Mongoose
+
+MongoDB's flexibility and scalability are beneficial for fast-growing apps with evolving data, similar to this POC application, but careful design is needed to avoid performance and consistency issues.
+
+Mongoose is an Object Data Modeling (ODM) library for MongoDB and Node.js, providing a schema-based solution to define and interact with MongoDB documents using JavaScript objects. It works well with GraphQL and allows our resolvers to interact with the schema models, and also allows us to easily seed the database tables from our scripts.
+
+Benefits:
+
+* **Flexibility**: You can easily model complex data (e.g., programs, courses, users) without rigid schemas, which suits evolving data structures like student information or schedules.
+* **Scalability**: MongoDB handles large amounts of data and can scale horizontally, which is ideal if your university app grows with more users and tasks.
+* **Fast Development**: MongoDB's document model is close to how data is structured in your app, allowing quick development and iteration.
+
+Downsides:
+
+* **No Transactions by Default**: MongoDB lacks multi-document ACID transactions by default, which may be a drawback for operations requiring strict consistency (e.g., complex workflows like student registrations).
+* **Less Data Integrity Control**: Without a strong schema, maintaining data integrity can be more difficult, especially in a university app with complex relationships between users, courses, and schedules. I.e. the practices used to ensure that data within a database remains accurate, consistent, and reliable over its lifecycle.
+* **Indexing Performance**: Queries can slow down if not properly indexed, especially with large, unstructured data.
 
 ## Use cases
 
@@ -389,6 +603,7 @@ Examples:
 - Apollo server and client set up
 - Jest testing
 - Cypress
+- MongoDB & Mongoose
 
 ### More information
 
@@ -430,11 +645,58 @@ Pages router does not support React’s Server Components and lacks granular con
 App router has several new features: Server and Client Components, layouts, streaming (Pages can be progressively rendered and streamed to the client as they are generated) and Parallel and Intercepted Routes ( Enables more advanced routing patterns, like loading multiple sections of a page in parallel or rendering modal routes).
 ```
 
+5. What is the lifecycle of a JWT?
+
+```
+A JWT (JSON Web Token) has a lifecycle that includes creation, validation, and expiration. It is typically comprised of three parts:
+
+* Header: Specifies the token type and the signing algorithm.
+* Payload: Contains claims or user data (like user ID, role).
+* Signature: Ensures the token has not been tampered with.
+
+Claims often include: iss (issuer of token), exp (expiration time), sub (subject of the token such as User ID), and aud (audience).
+
+The token is issued when a user logs in, validated on subsequent requests, and eventually expires based on a defined duration (e.g. 1 hour), after which it needs to be renewed.
+```
+
+6. What are the principles ACID programming?
+
+```
+ACID stands for Atomicity, Consistency, Isolation, and Durability—key principles that ensure reliable database transactions. Essentially a set of key properties that define a transaction.
+
+* Atomicity: All parts of a transaction succeed or none at all.
+* Consistency: Transactions bring the database from one valid state to another.
+* Isolation: Concurrent transactions don't interfere with each other.
+* Durability: Once committed, data is saved even in case of a failure.
+```
+
+7. What is the difference when using Material UIs sx, and SaaS modules?
+
+```
+Material UI sx:
+
+* Allows you to apply styles directly in your component using the sx prop.
+* Styles are written as objects, enabling dynamic styles and easy access to Material UI's theme (e.g., breakpoints, colors).
+* Best for quick, component-level styling and when you need styles to react to props or state.
+* Can be considered a form of "JS-in-CSS." It allows you to write styles as JavaScript objects directly within your React components, instead of in separate CSS or Sass files.
+
+Sass Modules:
+
+* Provides modular, scoped CSS by using .module.scss files.
+* Class names are auto-generated, ensuring no global style conflicts.
+* Better for larger-scale, reusable styles across multiple components, but it requires managing separate CSS files and is less integrated with JavaScript logic.
+
+Comparison:
+
+* Material UI sx is more powerful for theme-based and dynamic styles, integrates well with JS, but can lead to inline-style bloat and hydration issues.
+* Sass Modules offer clearer separation of concerns (CSS in separate files), making them better for complex, reusable styles but harder to use for dynamic styling or when you need theme access, works better with hydration.
+```
+
 ## Whats next?
 
-- Introduction of a database (in memory? mongodb?)
-- Removing mock storage of data and migrating to using the database.
 - Addition of AAT tests
+- Addition of globalisation/translation
 - Addition of the study/collaboration page using web sockets.
 - Addition of the reccommendations page using ML.
+- Add entitlement logic to apply bespoke permissions when using APIs and routing.
 - Exploration into microfrontends and potentially deploying to a CDN using AWS.
