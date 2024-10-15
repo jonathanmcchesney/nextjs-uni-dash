@@ -57,6 +57,7 @@ const Header = ({ toggleTheme, mode }: any) => {
       <AppBar position="fixed" open={menuOpen}>
         <Toolbar>
           <IconButton
+            data-testid="side-menu-open-button"
             edge="start"
             color="inherit"
             aria-label="menu"
