@@ -1,25 +1,32 @@
-import { TRoot } from "@/types/graphql";
-import { users } from "../__data__/user.mocks";
-import { v4 as uuidv4 } from "uuid";
-import { IUser } from "@/types/user";
+import { TRoot } from "../../../../types/graphql";
+import { IUser } from "../../../../types/user";
+import { IUserDocument, User } from "../../../../lib/mongodb/models/User";
 
-// istanbul ignore next
 export const resolvers = {
   Query: {
-    getUsersForAuth: () => {
-      return users;
+    getUsersForAuth: async (): Promise<IUserDocument[]> => {
+      return await User.find({}, "id email");
     },
-    getUsers: (_: TRoot, _args: any, context: any) => {
+    getUsers: async (
+      _: TRoot,
+      _args: any,
+      context: any
+    ): Promise<IUserDocument[]> => {
       if (!context.user) {
         throw new Error("Not authenticated");
       }
-      return users;
+      return await User.find();
     },
-    getUser: (_: TRoot, { id }: { id: string }, context: any) => {
+    getUser: async (
+      _: TRoot,
+      { id }: { id: string },
+      context: any
+    ): Promise<IUserDocument | null> => {
       if (!context.user) {
         throw new Error("Not authenticated");
       }
-      const user = users.find((user) => user.id === id);
+      const user = await User.findOne({ id });
+
       if (!user) {
         throw new Error("User not found");
       }
@@ -28,62 +35,68 @@ export const resolvers = {
   },
 
   Mutation: {
-    createUser: (
+    createUser: async (
       _: TRoot,
       { name, email, age, major, universityId }: IUser,
       context: any
-    ) => {
+    ): Promise<IUserDocument> => {
       if (!context.user) {
         throw new Error("Not authenticated");
       }
 
-      const newUser: IUser = {
-        id: uuidv4(),
+      const newUser = new User({
         name,
         email,
         age,
         major,
         universityId,
-      };
-      users.push(newUser);
-      return newUser;
+      });
+
+      return await newUser.save();
     },
 
-    updateUser: (
+    updateUser: async (
       _: TRoot,
       { id, name, email, age, major, universityId }: IUser,
       context: any
-    ) => {
+    ): Promise<IUserDocument | null> => {
       if (!context.user) {
         throw new Error("Not authenticated");
       }
 
-      const user = users.find((user) => user.id === id);
-      if (!user) {
+      const updatedUser = await User.findOneAndUpdate(
+        { id },
+        {
+          name,
+          email,
+          age,
+          major,
+          universityId,
+        },
+        { new: true, runValidators: true }
+      );
+
+      if (!updatedUser) {
         throw new Error("User not found");
       }
 
-      const updatedUser = {
-        ...user,
-        name: name ?? user.name,
-        email: email ?? user.email,
-        age: age ?? user.age,
-        major: major ?? user.major,
-        universityId: universityId ?? user.universityId,
-      };
-
-      Object.assign(user, updatedUser);
-      return user;
+      return updatedUser;
     },
 
-    deleteUser: (_: TRoot, { id }: { id: string }, context: any) => {
+    deleteUser: async (
+      _: TRoot,
+      { id }: { id: string },
+      context: any
+    ): Promise<IUserDocument | null> => {
       if (!context.user) {
         throw new Error("Not authenticated");
       }
 
-      const index = users.findIndex((user) => user.id === id);
-      if (index === -1) return null;
-      const deletedUser = users.splice(index, 1)[0];
+      const deletedUser = await User.findOneAndDelete({ id });
+      if (!deletedUser) {
+        throw new Error("User not found");
+      }
+
       return deletedUser;
     },
   },

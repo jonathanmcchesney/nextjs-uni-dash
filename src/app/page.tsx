@@ -82,7 +82,12 @@ const HomePage = () => {
 
   return (
     <Box sx={{ padding: "1rem 2rem 2rem 2rem" }}>
-      <Typography variant="h3" gutterBottom sx={{ textAlign: "center" }}>
+      <Typography
+        data-testid="home-title"
+        variant="h3"
+        gutterBottom
+        sx={{ textAlign: "center" }}
+      >
         Welcome to Your University Dashboard
       </Typography>
       <Typography

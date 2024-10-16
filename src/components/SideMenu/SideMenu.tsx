@@ -63,6 +63,7 @@ const SideMenu = ({
 
   return (
     <Drawer
+      data-testid="side-menu-container"
       sx={{
         width: drawerWidth,
         flexShrink: 0,

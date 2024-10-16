@@ -2,10 +2,10 @@ import { defineConfig } from "cypress";
 
 export default defineConfig({
   e2e: {
-    baseUrl: "http://localhost:3000", // Update this with your app's base URL
+    baseUrl: "http://localhost:3000",
     supportFile: "cypress/support/e2e.ts",
     fixturesFolder: "cypress/fixtures",
-    video: false, // You can enable video recording if needed
+    video: false,
     screenshotOnRunFailure: true,
     setupNodeEvents(on, config) {
       // implement node event listeners here

@@ -17,7 +17,6 @@ jest.mock("jsonwebtoken", () => ({
   verify: jest.fn(),
 }));
 
-
 describe("GraphQL API Route", () => {
   let mockHandler: jest.Mock;
 

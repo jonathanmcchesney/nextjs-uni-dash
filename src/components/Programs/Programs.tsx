@@ -12,7 +12,7 @@ import {
   Button,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { ICourse } from "@/types/course";
+import { ICourse } from "@/types/university";
 
 const Programs = ({ programs }: { programs: any[] }) => {
   const [open, setOpen] = useState(false);

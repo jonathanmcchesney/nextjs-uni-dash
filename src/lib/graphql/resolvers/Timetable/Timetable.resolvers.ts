@@ -1,26 +1,21 @@
-import { TRoot } from "@/types/graphql";
-import { timetables } from "../__data__/timetable.mocks";
-
-const getTimetableForUserId = (userId: string) => {
-  return (
-    timetables?.find((timetable) => timetable.userId === userId)?.timetable ||
-    []
-  );
-};
-
-const findTimetableByUserId = (userId: string) => {
-  return timetables.find((timetable) => timetable.userId === userId);
-};
+import { TRoot } from "../../../../types/graphql";
+import { Timetable } from "../../../../lib/mongodb/models/Timetable";
+import { IClass } from "../../../../types/timetable";
 
 export const resolvers = {
   Query: {
-    getTimetable: (_: TRoot, { userId }: { userId: string }) => {
-      return getTimetableForUserId(userId);
+    getTimetable: async (_: TRoot, { userId }: { userId: string }) => {
+      try {
+        const userTimetable = await Timetable.findOne({ userId });
+        return userTimetable?.timetable || [];
+      } catch {
+        throw new Error("Error fetching timetable");
+      }
     },
   },
 
   Mutation: {
-    addClass: (
+    addClass: async (
       _: TRoot,
       {
         userId,
@@ -38,27 +33,33 @@ export const resolvers = {
     ) => {
       const newClass = {
         id: classId,
+        name: "New Class",
         startTime,
         endTime,
         day,
-        name: "New Class",
         category: "class",
       };
 
-      const userTimetable = findTimetableByUserId(userId);
+      try {
+        let userTimetable = await Timetable.findOne({ userId });
 
-      if (userTimetable) {
-        userTimetable.timetable.push(newClass);
-      } else {
-        timetables.push({
-          userId,
-          timetable: [newClass],
-        });
+        if (userTimetable) {
+          userTimetable.timetable.push(newClass);
+        } else {
+          userTimetable = new Timetable({
+            userId,
+            timetable: [newClass],
+          });
+        }
+
+        await userTimetable.save();
+        return newClass;
+      } catch {
+        throw new Error("Error adding class");
       }
-      return newClass;
     },
 
-    updateClass: (
+    updateClass: async (
       _: TRoot,
       {
         userId,
@@ -74,20 +75,34 @@ export const resolvers = {
         day: string;
       }
     ) => {
-      const userTimetable = findTimetableByUserId(userId);
+      try {
+        const userTimetable = await Timetable.findOne({ userId });
+        if (userTimetable) {
+          const classItem = userTimetable.timetable.find(
+            (_classItem: IClass) => _classItem.id === classId
+          );
+          if (classItem) {
+            classItem.startTime = startTime;
+            classItem.endTime = endTime;
+            classItem.day = day;
 
-      if (userTimetable) {
-        const classItem = userTimetable.timetable.find(
-          (classItem) => classItem.id === classId
-        );
-        if (classItem) {
-          classItem.startTime = startTime;
-          classItem.endTime = endTime;
-          classItem.day = day;
+            await userTimetable.save();
+            return classItem;
+          } else {
+            throw new Error("Class not found");
+          }
+        } else {
+          throw new Error("Timetable not found");
         }
-        return classItem || null;
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          throw new Error(
+            `Error updating class. Original error: ${error.message}`
+          );
+        } else {
+          throw new Error("Unknown error occurred");
+        }
       }
-      return null;
     },
   },
 };

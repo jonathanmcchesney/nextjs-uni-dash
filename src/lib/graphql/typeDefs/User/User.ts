@@ -18,7 +18,6 @@ export const typeDefs = gql`
   type Query {
     getUsers: [User]
     getUsersForAuth: [UserForAuth]
-
     getUser(id: ID!): User
   }
 

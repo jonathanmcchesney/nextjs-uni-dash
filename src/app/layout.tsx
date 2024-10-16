@@ -4,11 +4,11 @@ import ThemeProviderClient from "@/components/ThemeProviderClient/ThemeProviderC
 import ApolloProviderWrapper from "@/components/ApolloProviderWrapper/ApolloProviderWrapper";
 import { cookies } from "next/headers";
 
-const title = "Recommendation App";
+const title = "Uni-Dash";
 
 export const metadata: Metadata = {
   title,
-  description: "Demo App",
+  description: "Your one-stop platform to manage your university life—track your progress, stay organized, and access helpful resources.",
 };
 
 const RootLayout = ({ children, pageProps }: any): JSX.Element => {

@@ -7,6 +7,7 @@ import { startServerAndCreateNextHandler } from "@as-integrations/next";
 import { schema } from "../../../lib/graphql";
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
+import dbConnect from "../../../lib/mongodb/mongodb";
 
 const JWT_SECRET = process.env.JWT_SECRET || "fake-secret-key";
 
@@ -27,6 +28,9 @@ async function initServer() {
   if (!serverHandler || process.env.NODE_ENV === "test") {
     serverHandler = startServerAndCreateNextHandler(server, {
       context: async () => {
+        // Connect to MongoDB
+        await dbConnect();
+
         const cookieStore = cookies();
         const token = cookieStore.get("token")?.value || null;
 

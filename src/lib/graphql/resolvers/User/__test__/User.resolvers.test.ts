@@ -1,65 +1,79 @@
 import { resolvers } from "../User.resolvers";
-import { users } from "../../__data__/user.mocks";
+import { User } from "../../../../../lib/mongodb/models/User";
 
-jest.mock("uuid", () => ({
-  v4: jest.fn(() => "new-uuid"),
-}));
+jest.mock("../../../../../lib/mongodb/models/User");
 
 describe("User Resolvers", () => {
+  const mockUsers = [
+    { id: "user-1", name: "John Doe", email: "john@example.com", age: 25 },
+    { id: "user-2", name: "Jane Doe", email: "jane@example.com", age: 30 },
+  ];
+
   beforeEach(() => {
-    users.length = 0;
-    users.push(
-      { id: "user-1", name: "John Doe", email: "john@example.com", age: 25 },
-      { id: "user-2", name: "Jane Doe", email: "jane@example.com", age: 30 }
-    );
+    jest.clearAllMocks();
   });
 
   describe("getUsersForAuth", () => {
-    it("should return all users without authentication", () => {
-      const result = resolvers.Query.getUsersForAuth(null, null, null);
-      expect(result).toEqual(users);
+    it("should return all users with id and email", async () => {
+      (User.find as jest.Mock).mockResolvedValue(mockUsers);
+
+      const result = await resolvers.Query.getUsersForAuth();
+      expect(User.find).toHaveBeenCalledWith({}, "id email");
+      expect(result).toEqual(mockUsers);
     });
   });
 
   describe("getUsers", () => {
-    it("should return users when authenticated", () => {
+    it("should return users when authenticated", async () => {
       const context = { user: { id: "user-1" } };
-      const result = resolvers.Query.getUsers(null, null, context);
-      expect(result).toEqual(users);
+      (User.find as jest.Mock).mockResolvedValue(mockUsers);
+
+      const result = await resolvers.Query.getUsers(null, null, context);
+      expect(User.find).toHaveBeenCalled();
+      expect(result).toEqual(mockUsers);
     });
 
-    it("should throw an error when not authenticated", () => {
+    it("should throw an error when not authenticated", async () => {
       const context = { user: null };
-      expect(() => resolvers.Query.getUsers(null, null, context)).toThrow(
-        "Not authenticated"
-      );
+      await expect(
+        resolvers.Query.getUsers(null, null, context)
+      ).rejects.toThrow("Not authenticated");
     });
   });
 
   describe("getUser", () => {
-    it("should return a user by ID when authenticated", () => {
+    it("should return a user by ID when authenticated", async () => {
       const context = { user: { id: "user-1" } };
-      const result = resolvers.Query.getUser(null, { id: "user-1" }, context);
-      expect(result).toEqual(users[0]);
+      (User.findOne as jest.Mock).mockResolvedValue(mockUsers[0]);
+
+      const result = await resolvers.Query.getUser(
+        null,
+        { id: "user-1" },
+        context
+      );
+      expect(User.findOne).toHaveBeenCalledWith({ id: "user-1" });
+      expect(result).toEqual(mockUsers[0]);
     });
 
-    it("should throw an error when not authenticated", () => {
+    it("should throw an error when not authenticated", async () => {
       const context = { user: null };
-      expect(() =>
+      await expect(
         resolvers.Query.getUser(null, { id: "user-1" }, context)
-      ).toThrow("Not authenticated");
+      ).rejects.toThrow("Not authenticated");
     });
 
-    it("should throw an error if the user is not found", () => {
+    it("should throw an error if the user is not found", async () => {
       const context = { user: { id: "user-1" } };
-      expect(() =>
+      (User.findOne as jest.Mock).mockResolvedValue(null);
+
+      await expect(
         resolvers.Query.getUser(null, { id: "non-existent" }, context)
-      ).toThrow("User not found");
+      ).rejects.toThrow("User not found");
     });
   });
 
   describe("createUser", () => {
-    it("should create a new user when authenticated", () => {
+    it("should create a new user when authenticated", async () => {
       const context = { user: { id: "user-1" } };
       const args = {
         name: "New User",
@@ -69,39 +83,31 @@ describe("User Resolvers", () => {
         universityId: "uni-123",
       };
 
-      const result = resolvers.Mutation.createUser(null, args, context);
-      expect(result).toEqual({
-        id: "new-uuid",
-        ...args,
-      });
+      const mockSavedUser = { id: "new-uuid", ...args };
+      (User.prototype.save as jest.Mock).mockResolvedValue(mockSavedUser);
 
-      expect(users).toContainEqual({
-        id: "new-uuid",
-        ...args,
-      });
+      const result = await resolvers.Mutation.createUser(null, args, context);
+      expect(result).toEqual(mockSavedUser);
     });
 
-    it("should throw an error when not authenticated", () => {
+    it("should throw an error when not authenticated", async () => {
       const context = { user: null };
-      expect(() =>
-        resolvers.Mutation.createUser(
-          null,
-          {
-            id: "user-1",
-            name: "",
-            email: "",
-            age: 20,
-            major: "",
-            universityId: "",
-          },
-          context
-        )
-      ).toThrow("Not authenticated");
+      const args = {
+        name: "New User",
+        email: "newuser@example.com",
+        age: 28,
+        major: "Physics",
+        universityId: "uni-123",
+      };
+
+      await expect(
+        resolvers.Mutation.createUser(null, args, context)
+      ).rejects.toThrow("Not authenticated");
     });
   });
 
   describe("updateUser", () => {
-    it("should update an existing user when authenticated", () => {
+    it("should update an existing user when authenticated", async () => {
       const context = { user: { id: "user-1" } };
       const args = {
         id: "user-1",
@@ -110,79 +116,79 @@ describe("User Resolvers", () => {
         age: 35,
       };
 
-      const result = resolvers.Mutation.updateUser(null, args, context);
-      expect(result).toEqual({
-        ...users[0],
-        ...args,
-      });
+      const mockUpdatedUser = { ...mockUsers[0], ...args };
+      (User.findOneAndUpdate as jest.Mock).mockResolvedValue(mockUpdatedUser);
 
-      expect(users[0]).toEqual({
-        ...users[0],
-        ...args,
-      });
+      const result = await resolvers.Mutation.updateUser(null, args, context);
+      expect(User.findOneAndUpdate).toHaveBeenCalledWith(
+        { id: "user-1" },
+        { name: "Updated Name", email: "updated@example.com", age: 35 },
+        { new: true, runValidators: true }
+      );
+      expect(result).toEqual(mockUpdatedUser);
     });
 
-    it("should throw an error if the user is not found", () => {
+    it("should throw an error if the user is not found", async () => {
       const context = { user: { id: "user-1" } };
+      (User.findOneAndUpdate as jest.Mock).mockResolvedValue(null);
+
       const args = {
         id: "non-existent",
         name: "Updated Name",
-        email: "",
-        age: 20,
-        major: "",
-        universityId: "",
+        email: "updated@example.com",
+        age: 35,
       };
-      expect(() => resolvers.Mutation.updateUser(null, args, context)).toThrow(
-        "User not found"
-      );
+
+      await expect(
+        resolvers.Mutation.updateUser(null, args, context)
+      ).rejects.toThrow("User not found");
     });
 
-    it("should throw an error when not authenticated", () => {
+    it("should throw an error when not authenticated", async () => {
       const context = { user: null };
-      expect(() =>
-        resolvers.Mutation.updateUser(
-          null,
-          {
-            id: "",
-            name: "",
-            email: "",
-            age: 20,
-            major: "",
-            universityId: "",
-          },
-          context
-        )
-      ).toThrow("Not authenticated");
+      const args = {
+        id: "user-1",
+        name: "Updated Name",
+        email: "updated@example.com",
+        age: 35,
+      };
+
+      await expect(
+        resolvers.Mutation.updateUser(null, args, context)
+      ).rejects.toThrow("Not authenticated");
     });
   });
 
   describe("deleteUser", () => {
-    it("should delete a user when authenticated", () => {
+    it("should delete a user when authenticated", async () => {
       const context = { user: { id: "user-1" } };
       const args = { id: "user-1" };
 
-      const userToBeDeleted = users.find((user) => user.id === "user-1");
-      expect(users).toContainEqual(userToBeDeleted);
+      (User.findOneAndDelete as jest.Mock).mockResolvedValue(mockUsers[0]);
 
-      const result = resolvers.Mutation.deleteUser(null, args, context);
-      expect(result).toEqual(userToBeDeleted);
-
-      expect(users).not.toContainEqual(userToBeDeleted);
+      const result = await resolvers.Mutation.deleteUser(null, args, context);
+      expect(User.findOneAndDelete).toHaveBeenCalledWith({ id: "user-1" });
+      expect(result).toEqual(mockUsers[0]);
     });
 
-    it("should return null if the user is not found", () => {
+    it("should throw an error if the user is not found", async () => {
       const context = { user: { id: "user-1" } };
       const args = { id: "non-existent" };
 
-      const result = resolvers.Mutation.deleteUser(null, args, context);
-      expect(result).toBeNull();
+      (User.findOneAndDelete as jest.Mock).mockResolvedValue(null);
+
+      await expect(
+        resolvers.Mutation.deleteUser(null, args, context)
+      ).rejects.toThrow("User not found");
     });
 
-    it("should throw an error when not authenticated", () => {
+    it("should throw an error when not authenticated", async () => {
       const context = { user: null };
-      expect(() =>
-        resolvers.Mutation.deleteUser(null, { id: "user-1" }, context)
-      ).toThrow("Not authenticated");
+      const args = { id: "user-1" };
+
+      await expect(
+        resolvers.Mutation.deleteUser(null, args, context)
+      ).rejects.toThrow("Not authenticated");
     });
   });
 });
