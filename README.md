@@ -629,8 +629,8 @@ Essentially, GraphQL itself doesn’t directly support Suspense, but frameworks 
 3. What is the difference between the nextjs page routes and api routes?
 
 ```
-Pages - Serve React components that are rendered as UI pages
-App - Serve React components that are rendered as UI pages
+Page Routes: Serve UI pages (pages/page.ts, pages/timetable.ts).
+API Routes: Handle backend logic (pages/api/graphql.ts, pages/api/auth/login.ts).
 
 This is not to be mistaken for the previous way of setting up a NextJs application using the Pages Router, we are using the newer App Router architecture instead.
 ```
