@@ -427,8 +427,8 @@ Mongoose is an Object Data Modeling (ODM) library for MongoDB and Node.js, provi
 Benefits:
 
 * **Flexibility**: You can easily model complex data (e.g., programs, courses, users) without rigid schemas, which suits evolving data structures like student information or schedules.
-* **Scalability**: MongoDB handles large amounts of data and can scale horizontally, which is ideal if your university app grows with more users and tasks.
-* **Fast Development**: MongoDB's document model is close to how data is structured in your app, allowing quick development and iteration.
+* **Scalability**: MongoDB handles large amounts of data and can scale horizontally, which is ideal if the app grows with more users and tasks.
+* **Fast Development**: MongoDB's document model is close to how data is structured here, allowing quick development and iteration.
 
 Downsides:
 
@@ -675,10 +675,10 @@ ACID stands for Atomicity, Consistency, Isolation, and Durability—key principl
 ```
 Material UI sx:
 
-* Allows you to apply styles directly in your component using the sx prop.
+* Allows you to apply styles directly in an component using the sx prop.
 * Styles are written as objects, enabling dynamic styles and easy access to Material UI's theme (e.g., breakpoints, colors).
 * Best for quick, component-level styling and when you need styles to react to props or state.
-* Can be considered a form of "JS-in-CSS." It allows you to write styles as JavaScript objects directly within your React components, instead of in separate CSS or Sass files.
+* Can be considered a form of "JS-in-CSS." It allows you to write styles as JavaScript objects directly within an React components, instead of in separate CSS or Sass files.
 
 Sass Modules:
 
