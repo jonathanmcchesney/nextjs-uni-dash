@@ -1,6 +1,6 @@
 import { mergeTypeDefs } from "@graphql-tools/merge";
 
-import { typeDefs as courseTypeDefs } from "./Course/Course";
+import { typeDefs as programTypeDefs } from "./Program/Program";
 import { typeDefs as userTypeDefs } from "./User/User";
 import { typeDefs as taskTypeDefs } from "./Task/Task";
 import { typeDefs as sharedTypeDefs } from "./shared/Types";
@@ -10,7 +10,7 @@ import { typeDefs as timetableTypeDefs } from "./Timetable/Timetable";
 
 const typeDefs = mergeTypeDefs([
   sharedTypeDefs,
-  courseTypeDefs,
+  programTypeDefs,
   userTypeDefs,
   taskTypeDefs,
   healthTypeDefs,

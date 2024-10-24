@@ -1,25 +1,22 @@
-import { TRoot } from "@/types/graphql";
-import {
-  healthResources,
-  mindfulnessTips,
-  wellnessData,
-} from "../__data__/health.mocks";
+import { TRoot } from "../../../../types/graphql";
+import { Wellness } from "../../../../lib/mongodb/models/Wellness";
+import { IWellness } from "../../../../types/health";
 import { v4 as uuidv4 } from "uuid";
-import { IWellness } from "@/types/health";
+import { MindfulnessTip } from "../../../../lib/mongodb/models/Mindfulness";
+import { HealthResource } from "../../../../lib/mongodb/models/Health";
 
-// istanbul ignore next
 export const resolvers = {
   Query: {
     getMindfulnessTips: async () => {
-      return mindfulnessTips;
+      return await MindfulnessTip.find();
     },
 
     getHealthResources: async () => {
-      return healthResources;
+      return await HealthResource.find();
     },
 
     getWellnessData: async (_: TRoot, { userId }: { userId: string }) => {
-      return wellnessData.filter((entry) => entry.userId === userId);
+      return await Wellness.find({ userId });
     },
   },
 
@@ -27,18 +24,16 @@ export const resolvers = {
     saveWellnessData: async (_: TRoot, { input }: { input: IWellness }) => {
       const { userId, mood, sleep, stress, date } = input;
 
-      const newWellnessEntry = {
+      const newWellnessEntry = new Wellness({
         id: uuidv4(),
         userId,
         mood,
         sleep,
         stress,
         date,
-      };
+      });
 
-      wellnessData.push(newWellnessEntry);
-
-      return newWellnessEntry;
+      return await newWellnessEntry.save();
     },
   },
 };

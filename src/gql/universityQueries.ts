@@ -48,18 +48,3 @@ export const GET_UNIVERSITY = gql`
     }
   }
 `;
-
-export const GET_PROGRAMS_BY_STUDENT = gql`
-  query GetProgramsByStudent($userId: ID!) {
-    getProgramsByStudent(userId: $userId) {
-      id
-      name
-      courses {
-        id
-        title
-        description
-        credits
-      }
-    }
-  }
-`;

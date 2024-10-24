@@ -13,7 +13,7 @@ import {
 import RoomIcon from "@mui/icons-material/Room";
 import DirectionsWalkIcon from "@mui/icons-material/DirectionsWalk";
 import { ILocation } from "@/types/location";
-import { IClassTimetable } from "@/types/timetaable";
+import { IClassTimetable } from "@/types/timetable";
 
 const mockLocations: ILocation[] = [
   {

@@ -43,6 +43,7 @@ const LoginPage = () => {
       {error && <Alert severity="error">{error}</Alert>}
 
       <TextField
+        data-testid="login-email"
         label="Email"
         type="email"
         value={email}
@@ -51,6 +52,7 @@ const LoginPage = () => {
       />
 
       <TextField
+        data-testid="login-pass"
         label="Password"
         type="password"
         value={password}
@@ -58,7 +60,13 @@ const LoginPage = () => {
         required
       />
 
-      <Button variant="contained" color="primary" type="submit" sx={{ mt: 2 }}>
+      <Button
+        data-testid="login-button"
+        variant="contained"
+        color="primary"
+        type="submit"
+        sx={{ mt: 2 }}
+      >
         Login
       </Button>
     </Box>

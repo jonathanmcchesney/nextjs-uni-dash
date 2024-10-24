@@ -1,117 +1,160 @@
 import { resolvers } from "../Task.resolvers";
-import { tasks } from "../../__data__/student.mocks";
-import { TRoot } from "@/types/graphql";
+import { Task } from "../../../../../lib/mongodb/models/Task";
+import { TRoot } from "../../../../../types/graphql";
 
-jest.mock("uuid", () => ({
-  v4: jest.fn(() => "mocked-uuid"),
-}));
+jest.mock("../../../../../lib/mongodb/models/Task");
 
 describe("Task Resolvers", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+  });
 
-    tasks.length = 0;
-    tasks.push(
-      {
+  describe("getTasks", () => {
+    it("should return tasks filtered by userId", async () => {
+      const mockTasks = [
+        {
+          id: "task-1",
+          title: "Task 1",
+          completed: false,
+          userId: "user-1",
+        },
+      ];
+
+      (Task.find as jest.Mock).mockResolvedValue(mockTasks);
+
+      const result = await resolvers.Query.getTasks(null as TRoot, {
+        userId: "user-1",
+      });
+
+      expect(Task.find).toHaveBeenCalledWith({ userId: "user-1" });
+      expect(result).toEqual(mockTasks);
+    });
+
+    it("should return an empty array if userId has no tasks", async () => {
+      (Task.find as jest.Mock).mockResolvedValue([]);
+
+      const result = await resolvers.Query.getTasks(null as TRoot, {
+        userId: "non-existent-user",
+      });
+
+      expect(Task.find).toHaveBeenCalledWith({ userId: "non-existent-user" });
+      expect(result).toEqual([]);
+    });
+  });
+
+  describe("addTask", () => {
+    it("should create a new task with generated id", async () => {
+      const mockTask = {
+        id: "mocked-uuid",
+        title: "New Task",
+        completed: false,
+        userId: "user-3",
+        save: jest.fn().mockResolvedValue({
+          id: "mocked-uuid",
+          title: "New Task",
+          completed: false,
+          userId: "user-3",
+        }),
+      };
+
+      (Task as jest.MockedFunction<any>).mockImplementation(() => mockTask);
+
+      const result = await resolvers.Mutation.addTask(null as TRoot, {
+        id: "",
+        title: "New Task",
+        userId: "user-3",
+      });
+
+      expect(result).toEqual({
+        id: "mocked-uuid",
+        title: "New Task",
+        completed: false,
+        userId: "user-3",
+      });
+
+      expect(mockTask.save).toHaveBeenCalled();
+    });
+
+    it("should use provided id if given", async () => {
+      const mockTask = {
+        id: "custom-id",
+        title: "New Task with Custom ID",
+        completed: false,
+        userId: "user-3",
+        save: jest.fn().mockResolvedValue({
+          id: "custom-id",
+          title: "New Task with Custom ID",
+          completed: false,
+          userId: "user-3",
+        }),
+      };
+
+      (Task as jest.MockedFunction<any>).mockImplementation(() => mockTask);
+
+      const result = await resolvers.Mutation.addTask(null as TRoot, {
+        id: "custom-id",
+        title: "New Task with Custom ID",
+        userId: "user-3",
+      });
+
+      expect(result).toEqual({
+        id: "custom-id",
+        title: "New Task with Custom ID",
+        completed: false,
+        userId: "user-3",
+      });
+
+      expect(mockTask.save).toHaveBeenCalled();
+    });
+  });
+
+  describe("toggleTaskCompletion", () => {
+    it("should toggle the completed status of a task", async () => {
+      const mockTask = {
         id: "task-1",
         title: "Task 1",
         completed: false,
         userId: "user-1",
-      },
-      {
-        id: "task-2",
-        title: "Task 2",
+        save: jest.fn().mockResolvedValue({
+          id: "task-1",
+          title: "Task 1",
+          completed: true,
+          userId: "user-1",
+        }),
+      };
+
+      (Task.findById as jest.Mock).mockResolvedValue(mockTask);
+
+      const result = await resolvers.Mutation.toggleTaskCompletion(
+        null as TRoot,
+        {
+          id: "task-1",
+        }
+      );
+
+      expect(Task.findById).toHaveBeenCalledWith("task-1");
+      expect(result).toEqual({
+        id: "task-1",
+        title: "Task 1",
         completed: true,
-        userId: "user-2",
-      }
-    );
-  });
-
-  it("getTasks should return tasks filtered by userId", () => {
-    const result = resolvers.Query.getTasks(null as TRoot, {
-      userId: "user-1",
-    });
-    expect(result).toEqual([
-      {
-        id: "task-1",
-        title: "Task 1",
-        completed: false,
         userId: "user-1",
-      },
-    ]);
-  });
+      });
 
-  it("getTasks should return an empty array if userId has no tasks", () => {
-    const result = resolvers.Query.getTasks(null as TRoot, {
-      userId: "non-existent-user",
-    });
-    expect(result).toEqual([]);
-  });
-
-  it("addTask should create a new task with generated id", () => {
-    const result = resolvers.Mutation.addTask(null as TRoot, {
-      id: "",
-      title: "New Task",
-      userId: "user-3",
+      expect(mockTask.save).toHaveBeenCalled();
     });
 
-    expect(result).toEqual({
-      id: "mocked-uuid",
-      title: "New Task",
-      completed: false,
-      userId: "user-3",
-    });
+    it("should return null if the task is not found", async () => {
+      (Task.findById as jest.Mock).mockResolvedValue(null);
 
-    expect(tasks.length).toBe(3);
-    expect(tasks[2]).toEqual({
-      id: "mocked-uuid",
-      title: "New Task",
-      completed: false,
-      userId: "user-3",
-    });
-  });
+      const result = await resolvers.Mutation.toggleTaskCompletion(
+        null as TRoot,
+        {
+          id: "non-existent-task",
+        }
+      );
 
-  it("addTask should use provided id if given", () => {
-    const result = resolvers.Mutation.addTask(null as TRoot, {
-      id: "custom-id",
-      title: "New Task with Custom ID",
-      userId: "user-3",
+      expect(Task.findById).toHaveBeenCalledWith("non-existent-task");
+      expect(result).toBeNull();
     });
-
-    expect(result).toEqual({
-      id: "custom-id",
-      title: "New Task with Custom ID",
-      completed: false,
-      userId: "user-3",
-    });
-
-    expect(tasks.length).toBe(3);
-    expect(tasks[2]).toEqual({
-      id: "custom-id",
-      title: "New Task with Custom ID",
-      completed: false,
-      userId: "user-3",
-    });
-  });
-
-  it("toggleTaskCompletion should toggle the completed status of a task", () => {
-    const result = resolvers.Mutation.toggleTaskCompletion(null as TRoot, {
-      id: "task-1",
-    });
-    expect(result).toEqual({
-      id: "task-1",
-      title: "Task 1",
-      completed: true,
-      userId: "user-1",
-    });
-
-    expect(tasks[0].completed).toBe(true);
-  });
-
-  it("toggleTaskCompletion should return an empty object if task is not found", () => {
-    const result = resolvers.Mutation.toggleTaskCompletion(null as TRoot, {
-      id: "non-existent-task",
-    });
-    expect(result).toEqual({});
   });
 });
